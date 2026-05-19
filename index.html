@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>MassiveShift College Academy | Job-Focused Skills for Africa</title>
-    <!-- Google Fonts: Modern, clean typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -21,7 +19,7 @@
             color: #1e2a3e;
             line-height: 1.5;
             scroll-behavior: smooth;
-            padding-bottom: 80px; /* Important: prevents floating footer from covering content */
+            padding-bottom: 80px;
         }
 
         .container {
@@ -30,7 +28,6 @@
             padding: 0 32px;
         }
 
-        /* Buttons & links */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -64,7 +61,6 @@
             color: #1e2a3e;
         }
 
-        /* Header & Nav */
         header {
             background: white;
             box-shadow: 0 1px 10px rgba(0,0,0,0.02);
@@ -81,19 +77,18 @@
             padding: 20px 0;
             flex-wrap: wrap;
         }
-        .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-        .logo span {
-            color: #f39c12;
+        .logo img {
+            height: 60px;
+            width: auto;
+            display: block;
         }
         .logo p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 0.5px;
             font-weight: 500;
             color: #4a627a;
+            margin-top: 5px;
+            text-align: center;
         }
         .nav-links {
             display: flex;
@@ -110,11 +105,63 @@
             color: #f39c12;
         }
 
-        /* Hero Section */
+        /* Hero Video Slideshow Styles */
         .hero {
+            position: relative;
+            overflow: hidden;
             padding: 80px 0 60px;
-            background: linear-gradient(135deg, #fef9f0 0%, #ffffff 100%);
+            min-height: 600px;
+            display: flex;
+            align-items: center;
         }
+
+        .hero-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .video-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 0;
+        }
+
+        .video-slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .video-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2;
+        }
+
+        .hero-content-wrapper {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+        }
+
         .hero-grid {
             display: flex;
             flex-wrap: wrap;
@@ -130,16 +177,20 @@
             line-height: 1.2;
             margin-bottom: 20px;
             letter-spacing: -1px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         .hero-content h1 span {
             color: #f39c12;
             border-bottom: 3px solid #f39c12;
+            text-shadow: none;
         }
         .hero-content p {
             font-size: 1.2rem;
-            color: #334e68;
+            color: rgba(255,255,255,0.9);
             margin-bottom: 32px;
             max-width: 550px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         .hero-stats {
             display: flex;
@@ -152,20 +203,20 @@
         .stat-number {
             font-size: 2rem;
             font-weight: 800;
-            color: #1e2a3e;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         .stat-label {
-            color: #5b7a9a;
+            color: rgba(255,255,255,0.8);
             font-weight: 500;
         }
         .hero-image {
             flex: 0.8;
-            background: #eef2fa;
+            background: rgba(0,0,0,0.5) !important;
+            backdrop-filter: blur(8px);
             border-radius: 32px;
             padding: 40px 20px;
             text-align: center;
-            background-image: radial-gradient(circle at 20% 30%, rgba(243,156,18,0.08) 2%, transparent 2.5%);
-            background-size: 28px 28px;
         }
         .hero-image i {
             font-size: 5rem;
@@ -175,6 +226,48 @@
         .hero-image h3 {
             font-size: 1.6rem;
             font-weight: 700;
+            color: white;
+        }
+        .hero-image p {
+            color: white !important;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 4;
+        }
+
+        .video-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.2s;
+        }
+
+        .video-dot.active {
+            background: #f39c12;
+            width: 24px;
+            border-radius: 6px;
+        }
+
+        .btn-outline {
+            border-color: white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: #f39c12;
+            border-color: #f39c12;
+            color: #1e2a3e;
         }
 
         section {
@@ -194,7 +287,6 @@
             font-size: 1.1rem;
         }
 
-        /* Gaps Grid */
         .gaps-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -222,7 +314,6 @@
             color: #3e5a76;
         }
 
-        /* Goal Stats */
         .goal-stats {
             background: #1e2a3e;
             color: white;
@@ -250,7 +341,6 @@
             opacity: 0.9;
         }
 
-        /* Infrastructure */
         .infra-block {
             background: #fef6e8;
             border-radius: 40px;
@@ -277,7 +367,6 @@
             color: #e67e22;
         }
 
-        /* Programs Grid */
         .programs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -314,7 +403,6 @@
             margin-bottom: 12px;
         }
 
-        /* Community CTA */
         .community-cta {
             background: linear-gradient(110deg, #1e2a3e 0%, #2c3e50 100%);
             border-radius: 40px;
@@ -331,7 +419,6 @@
             color: #1e2a3e;
         }
 
-        /* ========== FLOATING BOTTOM NAVIGATION (Mobile-Friendly) ========== */
         .floating-bottom-nav {
             position: fixed;
             bottom: 20px;
@@ -368,30 +455,6 @@
         .nav-item.active {
             color: #f39c12;
         }
-        /* Adjust for very small screens */
-        @media (max-width: 480px) {
-            .floating-bottom-nav {
-                gap: 20px;
-                padding: 8px 20px;
-                bottom: 16px;
-            }
-            .nav-item i {
-                font-size: 1.2rem;
-            }
-            .nav-item span {
-                font-size: 0.65rem;
-            }
-            body {
-                padding-bottom: 70px;
-            }
-        }
-        /* Desktop: still looks elegant */
-        @media (min-width: 1024px) {
-            .floating-bottom-nav {
-                bottom: 24px;
-                padding: 12px 32px;
-            }
-        }
 
         footer {
             background: #f7fafc;
@@ -411,6 +474,7 @@
             font-size: 0.8rem;
             color: #5a6e85;
         }
+
         @media (max-width: 768px) {
             .container {
                 padding: 0 24px;
@@ -430,6 +494,33 @@
             .section-title {
                 font-size: 1.9rem;
             }
+            .hero-grid {
+                flex-direction: column;
+            }
+            .floating-bottom-nav {
+                gap: 20px;
+                padding: 8px 20px;
+                bottom: 16px;
+            }
+            .nav-item i {
+                font-size: 1.2rem;
+            }
+            .nav-item span {
+                font-size: 0.65rem;
+            }
+            body {
+                padding-bottom: 70px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-stats {
+                flex-direction: column;
+                gap: 16px;
+            }
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -439,7 +530,7 @@
     <div class="container">
         <div class="navbar">
             <div class="logo">
-                <h1>Massive<span>Shift</span></h1>
+                <img src="f7d4f407-ff8c-4051-8d0e-10c6c7061c60.png" alt="MassiveShift College Academy Logo">
                 <p>College Academy + Community</p>
             </div>
             <div class="nav-links">
@@ -454,9 +545,31 @@
 </header>
 
 <main>
-    <!-- Home Section -->
+    <!-- Hero Section with Video Slideshow -->
     <section id="home" class="hero">
-        <div class="container">
+        <div class="hero-video-container">
+            <!-- Video Slide 1: gear.mp4 -->
+            <div class="video-slide active" data-video="1">
+                <video autoplay muted loop playsinline>
+                    <source src="gear.mp4" type="video/mp4">
+                </video>
+            </div>
+            <!-- Video Slide 2: cl.mp4 -->
+            <div class="video-slide" data-video="2">
+                <video muted loop playsinline>
+                    <source src="cl.mp4" type="video/mp4">
+                </video>
+            </div>
+            <!-- Video Slide 3: a.mp4 -->
+            <div class="video-slide" data-video="3">
+                <video muted loop playsinline>
+                    <source src="a.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-overlay"></div>
+        </div>
+
+        <div class="container hero-content-wrapper">
             <div class="hero-grid">
                 <div class="hero-content">
                     <h1>From <span>learner</span> to earner. <br> MassiveShift reshapes education.</h1>
@@ -480,9 +593,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="video-controls">
+            <button class="video-dot active" data-video="1"></button>
+            <button class="video-dot" data-video="2"></button>
+            <button class="video-dot" data-video="3"></button>
+        </div>
     </section>
 
-    <!-- About Section (new, linked from floating nav) -->
+    <!-- About Section -->
     <section id="about">
         <div class="container">
             <h2 class="section-title">About MassiveShift</h2>
@@ -516,7 +635,7 @@
         </div>
     </section>
 
-    <!-- Impact stats -->
+    <!-- Impact Stats -->
     <div class="container">
         <div class="goal-stats">
             <div class="stats-container">
@@ -534,7 +653,7 @@
             <div class="infra-text">
                 <h2>Infrastructure that powers employability</h2>
                 <p>Modern workshops, solar lab, computer lab, and maker spaces that mirror real working environments. Students learn on industry equipment.</p>
-                <div class="badge-tech" style="background:#e6d5b8; display:inline-block; padding:6px 16px; border-radius:50px;">⚡ Founding Partners: local solar associations & tech hubs</div>
+                <div style="background:#e6d5b8; display:inline-block; padding:6px 16px; border-radius:50px; margin-top:16px;">⚡ Founding Partners: local solar associations & tech hubs</div>
             </div>
             <div class="infra-icon">
                 <i class="fas fa-microchip"></i>
@@ -544,7 +663,7 @@
         </div>
     </div>
 
-    <!-- Programs Section (with ID for nav) -->
+    <!-- Programs Section -->
     <section id="programs-section">
         <div class="container">
             <h2 class="section-title">MassiveShift Programs</h2>
@@ -559,7 +678,7 @@
     </section>
 
     <!-- Community CTA -->
-    <div class="container" id="community">
+    <div class="container">
         <div class="community-cta">
             <div class="community-text">
                 <h2><i class="fas fa-hand-holding-heart"></i> MassiveShift College Community</h2>
@@ -569,23 +688,23 @@
         </div>
     </div>
 
-    <!-- Contact Section (new) -->
+    <!-- Contact Section -->
     <section id="contact">
         <div class="container">
             <h2 class="section-title">Get in Touch</h2>
             <p class="section-sub">Ready to shift your future? Reach out for admissions, partnerships, or community support.</p>
             <div style="display: flex; flex-wrap: wrap; gap: 48px; justify-content: center;">
-                <div style="background: #f9fbfd; padding: 32px; border-radius: 32px; min-width: 260px;">
+                <div style="background: #f9fbfd; padding: 32px; border-radius: 32px; min-width: 260px; text-align:center;">
                     <i class="fas fa-map-marker-alt" style="font-size: 2rem; color:#f39c12;"></i>
                     <h3>Visit Us</h3>
                     <p>Lusaka, Zambia<br>Great East Road, opposite UNZA</p>
                 </div>
-                <div style="background: #f9fbfd; padding: 32px; border-radius: 32px; min-width: 260px;">
+                <div style="background: #f9fbfd; padding: 32px; border-radius: 32px; min-width: 260px; text-align:center;">
                     <i class="fas fa-envelope" style="font-size: 2rem; color:#f39c12;"></i>
                     <h3>Email</h3>
                     <p>hello@massiveshift.academy<br>admissions@massiveshift.academy</p>
                 </div>
-                <div style="background: #f9fbfd; padding: 32px; border-radius: 32px; min-width: 260px;">
+                <div style="background: #f9fbfd; padding: 32px; border-radius: 32px; min-width: 260px; text-align:center;">
                     <i class="fas fa-phone-alt" style="font-size: 2rem; color:#f39c12;"></i>
                     <h3>Call / WhatsApp</h3>
                     <p>+260 97 123 4567<br>Mon-Fri, 9am–5pm</p>
@@ -600,29 +719,80 @@
         <div class="footer-grid">
             <div><h3 style="font-weight:800;">MassiveShift</h3><p>Job-focused College Academy & Community<br>Reshaping private education for Africa.</p></div>
             <div><h4>Quick links</h4><a href="#home" style="display:block;">Home</a><a href="#about" style="display:block;">About</a><a href="#programs-section" style="display:block;">Programs</a><a href="#contact" style="display:block;">Contact</a></div>
-            <div><h4>Legal</h4><a href="#">Privacy</a><a href="#" style="display:block;">TEVETA Registration</a></div>
+            <div><h4>Legal</h4><a href="#" style="display:block;">Privacy</a><a href="#" style="display:block;">TEVETA Registration</a></div>
         </div>
-        <div class="footer-copyright">© 2025 MassiveShift College Academy Ltd — Building Africa’s skilled workforce.</div>
+        <div class="footer-copyright">© 2025 MassiveShift College Academy Ltd — Building Africa's skilled workforce.</div>
     </div>
 </footer>
 
-<!-- FLOATING BOTTOM NAVIGATION: Home, About, Programs, Contact -->
+<!-- Floating Bottom Navigation -->
 <div class="floating-bottom-nav">
-    <a href="#home" class="nav-item" data-nav="home"><i class="fas fa-home"></i><span>Home</span></a>
-    <a href="#about" class="nav-item" data-nav="about"><i class="fas fa-info-circle"></i><span>About</span></a>
-    <a href="#programs-section" class="nav-item" data-nav="programs"><i class="fas fa-graduation-cap"></i><span>Programs</span></a>
-    <a href="#contact" class="nav-item" data-nav="contact"><i class="fas fa-envelope"></i><span>Contact</span></a>
+    <a href="#home" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="#about" class="nav-item"><i class="fas fa-info-circle"></i><span>About</span></a>
+    <a href="#programs-section" class="nav-item"><i class="fas fa-graduation-cap"></i><span>Programs</span></a>
+    <a href="#contact" class="nav-item"><i class="fas fa-envelope"></i><span>Contact</span></a>
 </div>
 
 <script>
-    // Highlight active nav item based on scroll position
+    // Hero Video Slideshow Logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.video-slide');
+        const dots = document.querySelectorAll('.video-dot');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            
+            const currentVideo = slides[index].querySelector('video');
+            if (currentVideo) {
+                currentVideo.currentTime = 0;
+                currentVideo.play().catch(e => console.log('Video autoplay prevented:', e));
+            }
+            
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            let next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+        }
+
+        function startSlideshow() {
+            if (slideInterval) clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 8000);
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSlide(index);
+                startSlideshow();
+            });
+        });
+
+        if (slides.length > 0) {
+            showSlide(0);
+            startSlideshow();
+            
+            const controls = document.querySelector('.video-controls');
+            if (controls) {
+                controls.addEventListener('mouseenter', () => clearInterval(slideInterval));
+                controls.addEventListener('mouseleave', startSlideshow);
+            }
+        }
+    });
+
+    // Active nav highlight on scroll
     const sections = document.querySelectorAll('#home, #about, #programs-section, #contact');
     const navItems = document.querySelectorAll('.nav-item');
 
     function updateActiveNav() {
         let current = '';
-        const scrollPosition = window.scrollY + 150; // offset for sticky header
-
+        const scrollPosition = window.scrollY + 150;
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
@@ -630,7 +800,6 @@
                 current = section.getAttribute('id');
             }
         });
-
         navItems.forEach(item => {
             item.classList.remove('active');
             const href = item.getAttribute('href').substring(1);
@@ -644,4 +813,4 @@
     window.addEventListener('load', updateActiveNav);
 </script>
 </body>
-</html>
+    </html>
