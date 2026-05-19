@@ -1467,7 +1467,6 @@
 <div class="page-transition" id="pageTransition"></div>
 <div class="scroll-top" id="scrollTop">↑</div>
 <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMessage"></span></div>
-
 <script>
   // ========================================
   // VIDEO CAROUSEL
@@ -1496,416 +1495,456 @@
   
   function nextSlide() { showSlide((currentSlide + 1) % videos.length); }
   
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => { showSlide(i); clearInterval(interval); interval = setInterval(nextSlide, 7000); });
-  });
+  if (dots.length > 0) {
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => { showSlide(i); clearInterval(interval); interval = setInterval(nextSlide, 7000); });
+    });
+  }
   
   interval = setInterval(nextSlide, 7000);
   
   // ========================================
-  // PROGRAMS CAROUSEL
+  // PROGRAMS CAROUSEL (Home Page)
   // ========================================
   const track = document.getElementById('carouselTrack');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const dotsContainer = document.getElementById('carouselDots');
   
-  let currentProgramIndex = 0;
-  let cardsPerView = 3;
-  const totalCards = 6;
-  
-  function updateCardsPerView() {
-    if (window.innerWidth <= 600) cardsPerView = 1;
-    else if (window.innerWidth <= 900) cardsPerView = 2;
-    else cardsPerView = 3;
-    updateCarousel();
-    updateDots();
-  }
-  
-  function updateCarousel() {
-    const cardWidth = track.children[0]?.offsetWidth + 24;
-    const newPosition = -(currentProgramIndex * cardWidth);
-    track.style.transform = `translateX(${newPosition}px)`;
-  }
-  
-  function updateDots() {
-    const maxIndex = totalCards - cardsPerView;
-    dotsContainer.innerHTML = '';
-    for (let i = 0; i <= maxIndex; i++) {
-      const dot = document.createElement('div');
-      dot.classList.add('dot-program');
-      if (i === currentProgramIndex) dot.classList.add('active');
-      dot.addEventListener('click', () => {
-        currentProgramIndex = i;
-        updateCarousel();
-        updateDots();
-      });
-      dotsContainer.appendChild(dot);
+  if (track && prevBtn && nextBtn) {
+    let currentProgramIndex = 0;
+    let cardsPerView = 3;
+    const totalCards = 6;
+    
+    function updateCardsPerView() {
+      if (window.innerWidth <= 600) cardsPerView = 1;
+      else if (window.innerWidth <= 900) cardsPerView = 2;
+      else cardsPerView = 3;
+      updateCarousel();
+      updateDots();
     }
-  }
-  
-  function nextProgramSlide() {
-    const maxIndex = totalCards - cardsPerView;
-    if (currentProgramIndex < maxIndex) currentProgramIndex++;
-    else currentProgramIndex = 0;
-    updateCarousel();
-    updateDots();
-  }
-  
-  function prevProgramSlide() {
-    const maxIndex = totalCards - cardsPerView;
-    if (currentProgramIndex > 0) currentProgramIndex--;
-    else currentProgramIndex = maxIndex;
-    updateCarousel();
-    updateDots();
-  }
-  
-  if (prevBtn && nextBtn) {
+    
+    function updateCarousel() {
+      const cardWidth = track.children[0]?.offsetWidth + 24;
+      const newPosition = -(currentProgramIndex * cardWidth);
+      track.style.transform = `translateX(${newPosition}px)`;
+    }
+    
+    function updateDots() {
+      const maxIndex = totalCards - cardsPerView;
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i <= maxIndex; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot-program');
+        if (i === currentProgramIndex) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+          currentProgramIndex = i;
+          updateCarousel();
+          updateDots();
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+    
+    function nextProgramSlide() {
+      const maxIndex = totalCards - cardsPerView;
+      if (currentProgramIndex < maxIndex) currentProgramIndex++;
+      else currentProgramIndex = 0;
+      updateCarousel();
+      updateDots();
+    }
+    
+    function prevProgramSlide() {
+      const maxIndex = totalCards - cardsPerView;
+      if (currentProgramIndex > 0) currentProgramIndex--;
+      else currentProgramIndex = maxIndex;
+      updateCarousel();
+      updateDots();
+    }
+    
     prevBtn.addEventListener('click', prevProgramSlide);
     nextBtn.addEventListener('click', nextProgramSlide);
+    window.addEventListener('resize', () => updateCardsPerView());
+    
+    let autoProgramSlide = setInterval(nextProgramSlide, 5000);
+    const carouselContainer = document.querySelector('.carousel-container');
+    if (carouselContainer) {
+      carouselContainer.addEventListener('mouseenter', () => clearInterval(autoProgramSlide));
+      carouselContainer.addEventListener('mouseleave', () => { autoProgramSlide = setInterval(nextProgramSlide, 5000); });
+    }
+    
+    updateCardsPerView();
   }
-  
-  window.addEventListener('resize', () => updateCardsPerView());
-  
-  let autoProgramSlide = setInterval(nextProgramSlide, 5000);
-  const carouselContainer = document.querySelector('.carousel-container');
-  if (carouselContainer) {
-    carouselContainer.addEventListener('mouseenter', () => clearInterval(autoProgramSlide));
-    carouselContainer.addEventListener('mouseleave', () => { autoProgramSlide = setInterval(nextProgramSlide, 5000); });
-  }
-  
-  updateCardsPerView();
   
   // ========================================
   // APPLICATION SYSTEM (ADAPTED FOR MASSIVESHIFT)
   // ========================================
-  let currentSection = 1;
-  const totalSections = 7;
-  let paymentCompleted = false;
-  let selectedResident = 'local';
-  let selectedPaymentMethod = 'airtel';
-  let selectedSchool = '';
-  let autoSaveTimer = null;
-  
-  const sections = document.querySelectorAll('#apply-page .form-section');
-  const steps = document.querySelectorAll('#progressSteps .step');
-  const formPrevBtn = document.getElementById('prevBtn');
-  const formNextBtn = document.getElementById('nextBtn');
-  const formSubmitBtn = document.getElementById('submitBtn');
-  const applicationForm = document.getElementById('applicationForm');
-  const toastMsg = document.getElementById('toastMessage');
-  const toastEl = document.getElementById('toast');
-  
-  // School Elements
-  const schoolCards = document.querySelectorAll('#schoolsGrid .school-card');
-  const programGroup = document.getElementById('programGroup');
-  const programSelect = document.getElementById('programSelect');
-  
-  // Payment Elements
-  const residentOptions = document.querySelectorAll('.resident-option');
-  const paymentMethods = document.querySelectorAll('.payment-method');
-  const payNowBtn = document.getElementById('payNowBtn');
-  const paymentStatus = document.getElementById('paymentStatus');
-  const feeAmount = document.getElementById('feeAmount');
-  const feeNote = document.getElementById('feeNote');
-  
-  function showToastMessage(message, isError = false) {
-    toastMsg.textContent = message;
-    toastEl.className = 'toast show';
-    if (isError) toastEl.classList.add('error');
-    setTimeout(() => toastEl.classList.remove('show'), 3000);
-  }
-  
-  function updateFee() {
-    if (selectedResident === 'local') {
-      feeAmount.innerHTML = 'ZK150';
-      feeNote.innerHTML = '(~$7.50 USD) for Zambian and African applicants';
-    } else {
-      feeAmount.innerHTML = '$15 USD';
-      feeNote.innerHTML = 'for international applicants';
-    }
-  }
-  
-  // School Selection
-  schoolCards.forEach(card => {
-    card.addEventListener('click', () => {
-      schoolCards.forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      selectedSchool = card.dataset.school;
-      const programs = {
-        business: ['Business Administration Certificate', 'Executive Business Administration'],
-        entrepreneurship: ['Entrepreneurship Certificate', 'Startup Launch Program'],
-        solar: ['Solar Installation & Business Certificate', 'Green Energy Entrepreneurship'],
-        digital: ['Digital Marketing Certificate', 'E-Commerce Management'],
-        repair: ['Mobile Repair Certificate', 'Device Repair Business Setup'],
-        sales: ['Sales Professional Certificate', 'Digital Sales & Marketing']
-      };
-      const programList = programs[selectedSchool] || [card.querySelector('h3')?.innerText || 'Certificate Program'];
-      programSelect.innerHTML = '<option value="">Select Program</option>';
-      programList.forEach(program => {
-        programSelect.innerHTML += `<option value="${program}">${program}</option>`;
-      });
-      programGroup.style.display = 'block';
-      saveToLocal();
-    });
-  });
-  
-  // Resident & Payment Selection
-  residentOptions.forEach(option => {
-    option.addEventListener('click', () => {
-      residentOptions.forEach(opt => opt.classList.remove('selected'));
-      option.classList.add('selected');
-      selectedResident = option.dataset.resident;
-      updateFee();
-      saveToLocal();
-    });
-  });
-  
-  paymentMethods.forEach(method => {
-    method.addEventListener('click', () => {
-      paymentMethods.forEach(m => m.classList.remove('selected'));
-      method.classList.add('selected');
-      selectedPaymentMethod = method.dataset.method;
-      saveToLocal();
-    });
-  });
-  
-  function processPayment() {
-    const firstName = document.getElementById('firstName')?.value;
-    const lastName = document.getElementById('lastName')?.value;
-    const email = document.getElementById('email')?.value;
-    const country = document.getElementById('country')?.value;
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    let currentSection = 1;
+    const totalSections = 7;
+    let paymentCompleted = false;
+    let selectedResident = 'local';
+    let selectedPaymentMethod = 'airtel';
+    let selectedSchool = '';
+    let autoSaveTimer = null;
     
-    if (!firstName || !lastName || !email || !country) {
-      showToastMessage('Please complete all required fields in Personal Information first', true);
-      return;
+    // Get Apply page elements
+    const applyPage = document.getElementById('apply-page');
+    if (!applyPage) return; // Exit if Apply page not found
+    
+    const sections = applyPage.querySelectorAll('.form-section');
+    const steps = applyPage.querySelectorAll('#progressSteps .step');
+    const formPrevBtn = applyPage.querySelector('#prevBtn');
+    const formNextBtn = applyPage.querySelector('#nextBtn');
+    const formSubmitBtn = applyPage.querySelector('#submitBtn');
+    const applicationForm = applyPage.querySelector('#applicationForm');
+    const toastMsg = document.getElementById('toastMessage');
+    const toastEl = document.getElementById('toast');
+    
+    // School Elements
+    const schoolCards = applyPage.querySelectorAll('#schoolsGrid .school-card');
+    const programGroup = applyPage.querySelector('#programGroup');
+    const programSelect = applyPage.querySelector('#programSelect');
+    
+    // Payment Elements
+    const residentOptions = applyPage.querySelectorAll('.resident-option');
+    const paymentMethods = applyPage.querySelectorAll('.payment-method');
+    const payNowBtn = applyPage.querySelector('#payNowBtn');
+    const paymentStatus = applyPage.querySelector('#paymentStatus');
+    const feeAmount = applyPage.querySelector('#feeAmount');
+    const feeNote = applyPage.querySelector('#feeNote');
+    
+    function showToastMessage(message, isError = false) {
+      if (!toastMsg || !toastEl) return;
+      toastMsg.textContent = message;
+      toastEl.className = 'toast show';
+      if (isError) toastEl.classList.add('error');
+      setTimeout(() => toastEl.classList.remove('show'), 3000);
     }
     
-    if (!selectedSchool || !programSelect.value) {
-      showToastMessage('Please select a program first', true);
-      return;
-    }
-    
-    paymentCompleted = true;
-    localStorage.setItem('applicationFeePaid', 'true');
-    paymentStatus.style.display = 'block';
-    paymentStatus.className = 'payment-status paid';
-    paymentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Payment confirmed! You can now complete your application.';
-    unlockSections();
-    const step3 = document.querySelector('#progressSteps .step[data-step="3"]');
-    if (step3) step3.classList.add('payment-paid');
-    saveToLocal();
-    showToastMessage('Payment confirmed! You can now continue with your application.');
-  }
-  
-  payNowBtn.addEventListener('click', processPayment);
-  
-  function unlockSections() {
-    const lockedInputs = document.querySelectorAll('#apply-page .payment-locked input, #apply-page .payment-locked select, #apply-page .payment-locked textarea');
-    lockedInputs.forEach(input => { input.disabled = false; });
-    const agreeTerms = document.getElementById('agreeTerms');
-    const agreeSubmit = document.getElementById('agreeSubmit');
-    if (agreeTerms) agreeTerms.disabled = false;
-    if (agreeSubmit) agreeSubmit.disabled = false;
-  }
-  
-  function checkPaymentStatus() {
-    const paid = localStorage.getItem('applicationFeePaid');
-    if (paid === 'true') {
-      paymentCompleted = true;
-      paymentStatus.style.display = 'block';
-      paymentStatus.className = 'payment-status paid';
-      paymentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Payment confirmed! You can now complete your application.';
-      unlockSections();
-      const step3 = document.querySelector('#progressSteps .step[data-step="3"]');
-      if (step3) step3.classList.add('payment-paid');
-    }
-  }
-  
-  function updateFormDisplay() {
-    sections.forEach((section, index) => {
-      section.classList.toggle('active', index + 1 === currentSection);
-    });
-    steps.forEach((step, index) => {
-      step.classList.toggle('active', index + 1 === currentSection);
-      if (index + 1 < currentSection) step.classList.add('completed');
-    });
-    formPrevBtn.style.display = currentSection === 1 ? 'none' : 'inline-block';
-    if (currentSection === totalSections) {
-      formNextBtn.style.display = 'none';
-      formSubmitBtn.style.display = 'inline-block';
-      generateReview();
-    } else {
-      formNextBtn.style.display = 'inline-block';
-      formSubmitBtn.style.display = 'none';
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  
-  function validateSection(sectionNum) {
-    if (sectionNum === 1) {
-      if (!selectedSchool) {
-        showToastMessage('Please select a program', true);
-        return false;
-      }
-      if (!programSelect.value) {
-        showToastMessage('Please select a specialization', true);
-        return false;
-      }
-      return true;
-    }
-    if (sectionNum === 3) {
-      if (!paymentCompleted) {
-        showToastMessage('Please complete the payment to continue', true);
-        return false;
-      }
-      return true;
-    }
-    const section = document.querySelector(`#apply-page .form-section[data-section="${sectionNum}"]`);
-    const requiredInputs = section.querySelectorAll('[required]');
-    let isValid = true;
-    requiredInputs.forEach(input => {
-      if (!input.value.trim() && !input.disabled) {
-        input.classList.add('error');
-        isValid = false;
+    function updateFee() {
+      if (!feeAmount || !feeNote) return;
+      if (selectedResident === 'local') {
+        feeAmount.innerHTML = 'ZK150';
+        feeNote.innerHTML = '(~$7.50 USD) for Zambian and African applicants';
       } else {
-        input.classList.remove('error');
+        feeAmount.innerHTML = '$15 USD';
+        feeNote.innerHTML = 'for international applicants';
       }
-    });
-    if (!isValid) showToastMessage('Please fill in all required fields', true);
-    return isValid;
-  }
-  
-  function generateReview() {
-    const reviewContent = document.getElementById('reviewContent');
-    const firstName = document.getElementById('firstName')?.value || '';
-    const lastName = document.getElementById('lastName')?.value || '';
-    const email = document.getElementById('email')?.value || '';
-    const phone = document.getElementById('phone')?.value || '';
-    const selectedProgram = programSelect?.options[programSelect.selectedIndex]?.text || '';
-    const schoolName = selectedSchool ? document.querySelector(`.school-card[data-school="${selectedSchool}"] h3`)?.innerText : '';
+    }
     
-    reviewContent.innerHTML = `
-      <div class="review-section">
-        <h3><i class="fas fa-graduation-cap"></i> Program Selection</h3>
-        <div class="review-item"><span class="review-label">Program:</span><span>${schoolName || ''}</span></div>
-        <div class="review-item"><span class="review-label">Specialization:</span><span>${selectedProgram}</span></div>
-      </div>
-      <div class="review-section">
-        <h3><i class="fas fa-user"></i> Personal Information</h3>
-        <div class="review-item"><span class="review-label">Name:</span><span>${firstName} ${lastName}</span></div>
-        <div class="review-item"><span class="review-label">Email:</span><span>${email}</span></div>
-        <div class="review-item"><span class="review-label">Phone:</span><span>${phone}</span></div>
-      </div>
-      <div class="review-section">
-        <h3><i class="fas fa-credit-card"></i> Payment Information</h3>
-        <div class="review-item"><span class="review-label">Application Fee:</span><span>${selectedResident === 'local' ? 'ZK150' : '$15 USD'}</span></div>
-        <div class="review-item"><span class="review-label">Payment Status:</span><span style="color: var(--success);">✓ Paid</span></div>
-      </div>
-    `;
-  }
-  
-  function nextSection() {
-    if (validateSection(currentSection)) {
-      if (currentSection < totalSections) {
-        currentSection++;
+    // School Selection
+    if (schoolCards.length > 0) {
+      schoolCards.forEach(card => {
+        card.addEventListener('click', () => {
+          schoolCards.forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          selectedSchool = card.dataset.school;
+          const programs = {
+            business: ['Business Administration Certificate', 'Executive Business Administration'],
+            entrepreneurship: ['Entrepreneurship Certificate', 'Startup Launch Program'],
+            solar: ['Solar Installation & Business Certificate', 'Green Energy Entrepreneurship'],
+            digital: ['Digital Marketing Certificate', 'E-Commerce Management'],
+            repair: ['Mobile Repair Certificate', 'Device Repair Business Setup'],
+            sales: ['Sales Professional Certificate', 'Digital Sales & Marketing']
+          };
+          const programList = programs[selectedSchool] || [card.querySelector('h3')?.innerText || 'Certificate Program'];
+          if (programSelect) {
+            programSelect.innerHTML = '<option value="">Select Program</option>';
+            programList.forEach(program => {
+              programSelect.innerHTML += `<option value="${program}">${program}</option>`;
+            });
+          }
+          if (programGroup) programGroup.style.display = 'block';
+          saveToLocal();
+        });
+      });
+    }
+    
+    // Resident & Payment Selection
+    if (residentOptions.length > 0) {
+      residentOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          residentOptions.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          selectedResident = option.dataset.resident;
+          updateFee();
+          saveToLocal();
+        });
+      });
+    }
+    
+    if (paymentMethods.length > 0) {
+      paymentMethods.forEach(method => {
+        method.addEventListener('click', () => {
+          paymentMethods.forEach(m => m.classList.remove('selected'));
+          method.classList.add('selected');
+          selectedPaymentMethod = method.dataset.method;
+          saveToLocal();
+        });
+      });
+    }
+    
+    function processPayment() {
+      const firstName = applyPage.querySelector('#firstName')?.value;
+      const lastName = applyPage.querySelector('#lastName')?.value;
+      const email = applyPage.querySelector('#email')?.value;
+      const country = applyPage.querySelector('#country')?.value;
+      
+      if (!firstName || !lastName || !email || !country) {
+        showToastMessage('Please complete all required fields in Personal Information first', true);
+        return;
+      }
+      
+      if (!selectedSchool || !programSelect?.value) {
+        showToastMessage('Please select a program first', true);
+        return;
+      }
+      
+      paymentCompleted = true;
+      localStorage.setItem('applicationFeePaid', 'true');
+      if (paymentStatus) {
+        paymentStatus.style.display = 'block';
+        paymentStatus.className = 'payment-status paid';
+        paymentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Payment confirmed! You can now complete your application.';
+      }
+      unlockSections();
+      const step3 = applyPage.querySelector('#progressSteps .step[data-step="3"]');
+      if (step3) step3.classList.add('payment-paid');
+      saveToLocal();
+      showToastMessage('Payment confirmed! You can now continue with your application.');
+    }
+    
+    if (payNowBtn) {
+      payNowBtn.addEventListener('click', processPayment);
+    }
+    
+    function unlockSections() {
+      const lockedInputs = applyPage.querySelectorAll('.payment-locked input, .payment-locked select, .payment-locked textarea');
+      lockedInputs.forEach(input => { input.disabled = false; });
+      const agreeTerms = applyPage.querySelector('#agreeTerms');
+      const agreeSubmit = applyPage.querySelector('#agreeSubmit');
+      if (agreeTerms) agreeTerms.disabled = false;
+      if (agreeSubmit) agreeSubmit.disabled = false;
+    }
+    
+    function checkPaymentStatus() {
+      const paid = localStorage.getItem('applicationFeePaid');
+      if (paid === 'true') {
+        paymentCompleted = true;
+        if (paymentStatus) {
+          paymentStatus.style.display = 'block';
+          paymentStatus.className = 'payment-status paid';
+          paymentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Payment confirmed! You can now complete your application.';
+        }
+        unlockSections();
+        const step3 = applyPage.querySelector('#progressSteps .step[data-step="3"]');
+        if (step3) step3.classList.add('payment-paid');
+      }
+    }
+    
+    function updateFormDisplay() {
+      if (!sections.length) return;
+      sections.forEach((section, index) => {
+        section.classList.toggle('active', index + 1 === currentSection);
+      });
+      if (steps.length) {
+        steps.forEach((step, index) => {
+          step.classList.toggle('active', index + 1 === currentSection);
+          if (index + 1 < currentSection) step.classList.add('completed');
+        });
+      }
+      if (formPrevBtn) formPrevBtn.style.display = currentSection === 1 ? 'none' : 'inline-block';
+      if (formNextBtn && formSubmitBtn) {
+        if (currentSection === totalSections) {
+          formNextBtn.style.display = 'none';
+          formSubmitBtn.style.display = 'inline-block';
+          generateReview();
+        } else {
+          formNextBtn.style.display = 'inline-block';
+          formSubmitBtn.style.display = 'none';
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function validateSection(sectionNum) {
+      if (sectionNum === 1) {
+        if (!selectedSchool) {
+          showToastMessage('Please select a program', true);
+          return false;
+        }
+        if (!programSelect?.value) {
+          showToastMessage('Please select a specialization', true);
+          return false;
+        }
+        return true;
+      }
+      if (sectionNum === 3) {
+        if (!paymentCompleted) {
+          showToastMessage('Please complete the payment to continue', true);
+          return false;
+        }
+        return true;
+      }
+      const section = applyPage.querySelector(`.form-section[data-section="${sectionNum}"]`);
+      if (!section) return true;
+      const requiredInputs = section.querySelectorAll('[required]');
+      let isValid = true;
+      requiredInputs.forEach(input => {
+        if (!input.value.trim() && !input.disabled) {
+          input.classList.add('error');
+          isValid = false;
+        } else {
+          input.classList.remove('error');
+        }
+      });
+      if (!isValid) showToastMessage('Please fill in all required fields', true);
+      return isValid;
+    }
+    
+    function generateReview() {
+      const reviewContent = applyPage.querySelector('#reviewContent');
+      if (!reviewContent) return;
+      const firstName = applyPage.querySelector('#firstName')?.value || '';
+      const lastName = applyPage.querySelector('#lastName')?.value || '';
+      const email = applyPage.querySelector('#email')?.value || '';
+      const phone = applyPage.querySelector('#phone')?.value || '';
+      const selectedProgram = programSelect?.options[programSelect.selectedIndex]?.text || '';
+      const schoolName = selectedSchool ? applyPage.querySelector(`.school-card[data-school="${selectedSchool}"] h3`)?.innerText : '';
+      
+      reviewContent.innerHTML = `
+        <div class="review-section">
+          <h3><i class="fas fa-graduation-cap"></i> Program Selection</h3>
+          <div class="review-item"><span class="review-label">Program:</span><span>${schoolName || ''}</span></div>
+          <div class="review-item"><span class="review-label">Specialization:</span><span>${selectedProgram}</span></div>
+        </div>
+        <div class="review-section">
+          <h3><i class="fas fa-user"></i> Personal Information</h3>
+          <div class="review-item"><span class="review-label">Name:</span><span>${firstName} ${lastName}</span></div>
+          <div class="review-item"><span class="review-label">Email:</span><span>${email}</span></div>
+          <div class="review-item"><span class="review-label">Phone:</span><span>${phone}</span></div>
+        </div>
+        <div class="review-section">
+          <h3><i class="fas fa-credit-card"></i> Payment Information</h3>
+          <div class="review-item"><span class="review-label">Application Fee:</span><span>${selectedResident === 'local' ? 'ZK150' : '$15 USD'}</span></div>
+          <div class="review-item"><span class="review-label">Payment Status:</span><span style="color: var(--success);">✓ Paid</span></div>
+        </div>
+      `;
+    }
+    
+    function nextSection() {
+      if (validateSection(currentSection)) {
+        if (currentSection < totalSections) {
+          currentSection++;
+          updateFormDisplay();
+          saveToLocal();
+        }
+      }
+    }
+    
+    function prevSection() {
+      if (currentSection > 1) {
+        currentSection--;
         updateFormDisplay();
         saveToLocal();
       }
     }
-  }
-  
-  function prevSection() {
-    if (currentSection > 1) {
-      currentSection--;
-      updateFormDisplay();
-      saveToLocal();
-    }
-  }
-  
-  function submitForm(e) {
-    e.preventDefault();
-    const agreeTerms = document.getElementById('agreeTerms');
-    const agreeSubmit = document.getElementById('agreeSubmit');
-    if (!agreeTerms?.checked || !agreeSubmit?.checked) {
-      showToastMessage('Please agree to the terms and conditions', true);
-      return;
-    }
-    const submitButton = document.getElementById('submitBtn');
-    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-    submitButton.disabled = true;
-    setTimeout(() => {
-      showToastMessage('Application submitted successfully! You will receive a confirmation email.');
-      localStorage.removeItem('massiveshiftApplication');
-      localStorage.removeItem('applicationFeePaid');
-    }, 2000);
-  }
-  
-  function saveToLocal() {
-    const formData = { selectedSchool, selectedProgram: programSelect?.value, selectedResident, selectedPaymentMethod, paymentCompleted, currentSection };
-    const inputs = applicationForm?.querySelectorAll('input, select, textarea');
-    inputs?.forEach(input => { if (input.name) formData[input.name] = input.value; });
-    localStorage.setItem('massiveshiftApplication', JSON.stringify(formData));
-  }
-  
-  function loadFromLocal() {
-    const saved = localStorage.getItem('massiveshiftApplication');
-    if (saved) {
-      const data = JSON.parse(saved);
-      if (data.selectedSchool) {
-        selectedSchool = data.selectedSchool;
-        schoolCards.forEach(card => {
-          if (card.dataset.school === selectedSchool) card.classList.add('selected');
-        });
-      }
-      if (data.selectedResident) {
-        selectedResident = data.selectedResident;
-        residentOptions.forEach(opt => { if (opt.dataset.resident === selectedResident) opt.classList.add('selected'); });
-        updateFee();
-      }
-      if (data.currentSection) currentSection = data.currentSection;
-      updateFormDisplay();
-    }
-    checkPaymentStatus();
-  }
-  
-  formNextBtn?.addEventListener('click', nextSection);
-  formPrevBtn?.addEventListener('click', prevSection);
-  applicationForm?.addEventListener('submit', submitForm);
-  
-  steps.forEach(step => {
-    step.addEventListener('click', () => {
-      const stepNum = parseInt(step.dataset.step);
-      if (stepNum === 3 && !paymentCompleted) {
-        showToastMessage('Please complete payment first', true);
+    
+    function submitForm(e) {
+      e.preventDefault();
+      const agreeTerms = applyPage.querySelector('#agreeTerms');
+      const agreeSubmit = applyPage.querySelector('#agreeSubmit');
+      if (!agreeTerms?.checked || !agreeSubmit?.checked) {
+        showToastMessage('Please agree to the terms and conditions', true);
         return;
       }
-      if (stepNum < currentSection) {
-        currentSection = stepNum;
-        updateFormDisplay();
-      } else if (stepNum > currentSection && validateSection(currentSection)) {
-        currentSection = stepNum;
+      const submitButton = applyPage.querySelector('#submitBtn');
+      if (submitButton) {
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitButton.disabled = true;
+      }
+      setTimeout(() => {
+        showToastMessage('Application submitted successfully! You will receive a confirmation email.');
+        localStorage.removeItem('massiveshiftApplication');
+        localStorage.removeItem('applicationFeePaid');
+        if (submitButton) {
+          submitButton.innerHTML = 'Submit Application';
+          submitButton.disabled = false;
+        }
+      }, 2000);
+    }
+    
+    function saveToLocal() {
+      const formData = { selectedSchool, selectedProgram: programSelect?.value, selectedResident, selectedPaymentMethod, paymentCompleted, currentSection };
+      const inputs = applicationForm?.querySelectorAll('input, select, textarea');
+      inputs?.forEach(input => { if (input.name) formData[input.name] = input.value; });
+      localStorage.setItem('massiveshiftApplication', JSON.stringify(formData));
+    }
+    
+    function loadFromLocal() {
+      const saved = localStorage.getItem('massiveshiftApplication');
+      if (saved) {
+        const data = JSON.parse(saved);
+        if (data.selectedSchool) {
+          selectedSchool = data.selectedSchool;
+          schoolCards.forEach(card => {
+            if (card.dataset.school === selectedSchool) card.classList.add('selected');
+          });
+        }
+        if (data.selectedResident) {
+          selectedResident = data.selectedResident;
+          residentOptions.forEach(opt => { if (opt.dataset.resident === selectedResident) opt.classList.add('selected'); });
+          updateFee();
+        }
+        if (data.currentSection) currentSection = data.currentSection;
         updateFormDisplay();
       }
-    });
-  });
-  
-  function setupAutoSave() {
-    const inputs = applicationForm?.querySelectorAll('input, select, textarea');
-    inputs?.forEach(input => {
-      input.addEventListener('input', () => {
-        if (autoSaveTimer) clearTimeout(autoSaveTimer);
-        autoSaveTimer = setTimeout(() => saveToLocal(), 1000);
+      checkPaymentStatus();
+    }
+    
+    // Attach event listeners
+    if (formNextBtn) formNextBtn.addEventListener('click', nextSection);
+    if (formPrevBtn) formPrevBtn.addEventListener('click', prevSection);
+    if (applicationForm) applicationForm.addEventListener('submit', submitForm);
+    
+    if (steps.length) {
+      steps.forEach(step => {
+        step.addEventListener('click', () => {
+          const stepNum = parseInt(step.dataset.step);
+          if (stepNum === 3 && !paymentCompleted) {
+            showToastMessage('Please complete payment first', true);
+            return;
+          }
+          if (stepNum < currentSection) {
+            currentSection = stepNum;
+            updateFormDisplay();
+          } else if (stepNum > currentSection && validateSection(currentSection)) {
+            currentSection = stepNum;
+            updateFormDisplay();
+          }
+        });
       });
-    });
-  }
-  
-  // Initialize Application
-  loadFromLocal();
-  setupAutoSave();
-  updateFormDisplay();
-  if (residentOptions[0]) residentOptions[0].classList.add('selected');
-  if (paymentMethods[0]) paymentMethods[0].classList.add('selected');
+    }
+    
+    function setupAutoSave() {
+      const inputs = applicationForm?.querySelectorAll('input, select, textarea');
+      inputs?.forEach(input => {
+        input.addEventListener('input', () => {
+          if (autoSaveTimer) clearTimeout(autoSaveTimer);
+          autoSaveTimer = setTimeout(() => saveToLocal(), 1000);
+        });
+      });
+    }
+    
+    // Initialize Application
+    loadFromLocal();
+    setupAutoSave();
+    updateFormDisplay();
+    if (residentOptions[0]) residentOptions[0].classList.add('selected');
+    if (paymentMethods[0]) paymentMethods[0].classList.add('selected');
+  });
   
   // ========================================
   // PAGE SWITCHING LOGIC
@@ -1932,22 +1971,33 @@
   
   function switchPage(pId) {
     if (current === pId || !pages[pId]) return;
-    transitionEl.classList.add('active');
+    if (transitionEl) transitionEl.classList.add('active');
     setTimeout(() => {
       Object.values(pages).forEach(p => p?.classList.remove('active'));
       pages[pId].classList.add('active');
       current = pId;
       updateActive(pId);
       window.scrollTo(0, 0);
-      setTimeout(() => transitionEl.classList.remove('active'), 100);
+      setTimeout(() => {
+        if (transitionEl) transitionEl.classList.remove('active');
+      }, 100);
     }, 300);
   }
   
-  programCards.forEach(c => c.addEventListener('click', (e) => { e.stopPropagation(); switchPage('programs'); }));
-  allTriggers.forEach(t => t.addEventListener('click', (e) => { e.preventDefault(); const p = t.getAttribute('data-page'); if(p && pages[p]) switchPage(p); }));
+  if (programCards.length) {
+    programCards.forEach(c => c.addEventListener('click', (e) => { e.stopPropagation(); switchPage('programs'); }));
+  }
   
-  window.addEventListener('scroll', () => scrollTop.classList.toggle('visible', window.scrollY > 300));
-  scrollTop.addEventListener('click', () => window.scrollTo(0, 0));
+  if (allTriggers.length) {
+    allTriggers.forEach(t => t.addEventListener('click', (e) => { e.preventDefault(); const p = t.getAttribute('data-page'); if(p && pages[p]) switchPage(p); }));
+  }
+  
+  window.addEventListener('scroll', () => {
+    if (scrollTop) scrollTop.classList.toggle('visible', window.scrollY > 300);
+  });
+  if (scrollTop) {
+    scrollTop.addEventListener('click', () => window.scrollTo(0, 0));
+  }
   updateActive('home');
 </script>
 </body>
