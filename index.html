@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>MassiveShift College Academy | Job-Focused Skills for Africa</title>
-    <!-- Google Fonts: Modern, clean typography (similar to AISCA's professional look) -->
+    <!-- Google Fonts: Modern, clean typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (free icons) -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -21,6 +21,7 @@
             color: #1e2a3e;
             line-height: 1.5;
             scroll-behavior: smooth;
+            padding-bottom: 80px; /* Important: prevents floating footer from covering content */
         }
 
         .container {
@@ -71,7 +72,6 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(0px);
             background: rgba(255,255,255,0.96);
         }
         .navbar {
@@ -110,7 +110,7 @@
             color: #f39c12;
         }
 
-        /* Hero Section (inspired by AISCA hero) */
+        /* Hero Section */
         .hero {
             padding: 80px 0 60px;
             background: linear-gradient(135deg, #fef9f0 0%, #ffffff 100%);
@@ -177,7 +177,6 @@
             font-weight: 700;
         }
 
-        /* Section common */
         section {
             padding: 80px 0;
         }
@@ -195,7 +194,7 @@
             font-size: 1.1rem;
         }
 
-        /* Gaps Grid (like the "AISCA exists to close the gaps") */
+        /* Gaps Grid */
         .gaps-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -221,10 +220,9 @@
         }
         .gap-card p {
             color: #3e5a76;
-            line-height: 1.5;
         }
 
-        /* Goal Stats / Metric row */
+        /* Goal Stats */
         .goal-stats {
             background: #1e2a3e;
             color: white;
@@ -252,7 +250,7 @@
             opacity: 0.9;
         }
 
-        /* Compute for good (infrastructure) */
+        /* Infrastructure */
         .infra-block {
             background: #fef6e8;
             border-radius: 40px;
@@ -270,19 +268,6 @@
             font-weight: 800;
             margin-bottom: 16px;
         }
-        .infra-text p {
-            font-size: 1rem;
-            color: #2c3e4e;
-            margin-bottom: 24px;
-        }
-        .badge-tech {
-            background: #ffffffc9;
-            padding: 6px 16px;
-            border-radius: 50px;
-            display: inline-block;
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
         .infra-icon {
             flex: 0.6;
             text-align: center;
@@ -292,7 +277,7 @@
             color: #e67e22;
         }
 
-        /* Program cards (like AISCA Programs) */
+        /* Programs Grid */
         .programs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -308,8 +293,6 @@
         }
         .program-card:hover {
             transform: translateY(-6px);
-            border-color: #f39c1220;
-            box-shadow: 0 24px 40px -16px rgba(243,156,18,0.2);
         }
         .program-icon {
             background: #fef3e0;
@@ -330,26 +313,8 @@
             font-weight: 700;
             margin-bottom: 12px;
         }
-        .program-card p {
-            color: #4a627a;
-            margin-bottom: 24px;
-        }
-        .program-link {
-            font-weight: 700;
-            color: #f39c12;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .program-link i {
-            transition: transform 0.2s;
-        }
-        .program-link:hover i {
-            transform: translateX(4px);
-        }
 
-        /* Community / CTA Banner */
+        /* Community CTA */
         .community-cta {
             background: linear-gradient(110deg, #1e2a3e 0%, #2c3e50 100%);
             border-radius: 40px;
@@ -361,27 +326,78 @@
             align-items: center;
             gap: 32px;
         }
-        .community-text h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        .community-text p {
-            opacity: 0.85;
-        }
         .btn-light {
             background: white;
             color: #1e2a3e;
         }
-        .btn-light:hover {
-            background: #f39c12;
-            color: #1e2a3e;
+
+        /* ========== FLOATING BOTTOM NAVIGATION (Mobile-Friendly) ========== */
+        .floating-bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            background: rgba(30, 42, 62, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 10px 24px;
+            display: flex;
+            gap: 32px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            gap: 4px;
+        }
+        .nav-item i {
+            font-size: 1.4rem;
+        }
+        .nav-item:hover {
+            color: #f39c12;
+            transform: translateY(-2px);
+        }
+        .nav-item.active {
+            color: #f39c12;
+        }
+        /* Adjust for very small screens */
+        @media (max-width: 480px) {
+            .floating-bottom-nav {
+                gap: 20px;
+                padding: 8px 20px;
+                bottom: 16px;
+            }
+            .nav-item i {
+                font-size: 1.2rem;
+            }
+            .nav-item span {
+                font-size: 0.65rem;
+            }
+            body {
+                padding-bottom: 70px;
+            }
+        }
+        /* Desktop: still looks elegant */
+        @media (min-width: 1024px) {
+            .floating-bottom-nav {
+                bottom: 24px;
+                padding: 12px 32px;
+            }
         }
 
         footer {
             background: #f7fafc;
             padding: 48px 0 24px;
             border-top: 1px solid #e2e8f0;
+            margin-top: 40px;
         }
         .footer-grid {
             display: flex;
@@ -414,9 +430,6 @@
             .section-title {
                 font-size: 1.9rem;
             }
-            .goal-number {
-                font-size: 2rem;
-            }
         }
     </style>
 </head>
@@ -430,10 +443,10 @@
                 <p>College Academy + Community</p>
             </div>
             <div class="nav-links">
-                <a href="#">Home</a>
-                <a href="#gaps">Why Shift</a>
-                <a href="#programs">Programs</a>
-                <a href="#community">Community</a>
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#programs-section">Programs</a>
+                <a href="#contact">Contact</a>
                 <a href="#" class="btn-outline" style="padding:8px 20px; border-radius:40px;">Apply Now</a>
             </div>
         </div>
@@ -441,26 +454,17 @@
 </header>
 
 <main>
-    <!-- Hero section: job-focused, skills, speed -->
-    <div class="hero">
+    <!-- Home Section -->
+    <section id="home" class="hero">
         <div class="container">
             <div class="hero-grid">
                 <div class="hero-content">
                     <h1>From <span>learner</span> to earner. <br> MassiveShift reshapes education.</h1>
                     <p>Job-focused college academy & supportive community for Africa's youth. Solar, digital, repair, entrepreneurship — with speed and real outcomes.</p>
                     <div class="hero-stats">
-                        <div class="stat">
-                            <div class="stat-number">4-12</div>
-                            <div class="stat-label">Months programs</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-number">90%</div>
-                            <div class="stat-label">Job placement rate*</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-number">Free</div>
-                            <div class="stat-label">Alumni community</div>
-                        </div>
+                        <div class="stat"><div class="stat-number">4-12</div><div class="stat-label">Months programs</div></div>
+                        <div class="stat"><div class="stat-number">90%</div><div class="stat-label">Job placement rate*</div></div>
+                        <div class="stat"><div class="stat-number">Free</div><div class="stat-label">Alumni community</div></div>
                     </div>
                     <div style="margin-top: 32px;">
                         <a href="#" class="btn"><i class="fas fa-rocket"></i> Explore Programs</a>
@@ -476,44 +480,61 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Gaps / Challenges Section (inspired by AISCA's closing gaps) -->
-    <section id="gaps">
+    <!-- About Section (new, linked from floating nav) -->
+    <section id="about">
         <div class="container">
-            <h2 class="section-title">We exist to close Africa's skills gap</h2>
-            <p class="section-sub">The old model fails youth. MassiveShift bridges theory to income, providing practical training and an ecosystem of support.</p>
-            <div class="gaps-grid">
-                <div class="gap-card"><i class="fas fa-hourglass-half"></i><h3>Slow & theoretical</h3><p>Traditional education takes years without job guarantees. We teach only skills that lead to employment.</p></div>
-                <div class="gap-card"><i class="fas fa-chart-line"></i><h3>Youth exclusion</h3><p>Millions of young Africans are locked out of the digital & green economy. Our low-barrier entry opens doors.</p></div>
-                <div class="gap-card"><i class="fas fa-tools"></i><h3>Lack of practical infrastructure</h3><p>Limited workshops, labs, and real-world tools. MassiveShift builds hands-on labs for solar, repair & tech.</p></div>
-                <div class="gap-card"><i class="fas fa-handshake"></i><h3>No mentorship ecosystem</h3><p>Graduates face isolation. Our College Community provides free alumni networks, job leads, and peer support.</p></div>
-                <div class="gap-card"><i class="fas fa-chart-pie"></i><h3>Entrepreneurship gap</h3><p>Many want to start businesses but lack pricing, customer skills. We embed business modules in every program.</p></div>
-                <div class="gap-card"><i class="fas fa-globe"></i><h3>Fragmented policy</h3><p>We collaborate with TVET authorities, local employers, and industry bodies to standardize job-ready training.</p></div>
+            <h2 class="section-title">About MassiveShift</h2>
+            <p class="section-sub">We are a registered private TVET college and a non-profit community foundation, built to close Africa's skills-to-jobs gap.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: center;">
+                <div style="flex:1">
+                    <p style="font-size:1.1rem; margin-bottom: 20px;"><strong>MassiveShift is not just a college — it's a movement.</strong> We offer short, intensive certificate programs (4–12 months) in high-demand fields: solar installation, digital marketing, mobile repair, and entrepreneurship.</p>
+                    <p style="margin-bottom: 20px;">Our model is simple: teach only what leads to a job or a business. 70% practical, 30% theory. Graduate with a certificate, portfolio, and alumni network.</p>
+                    <p>We are registered with TEVETA (Zambia) and partner with local employers for internships and placements. The MassiveShift Community Foundation provides free mentorship, job boards, and peer support to graduates and the public.</p>
+                </div>
+                <div style="flex:0.8; background: #fef3e0; padding: 32px; border-radius: 32px; text-align: center;">
+                    <i class="fas fa-chalkboard-user" style="font-size: 3rem; color:#f39c12;"></i>
+                    <h3 style="margin: 16px 0;">Our Mission</h3>
+                    <p>Equip 100,000 African youth with job-ready skills by 2028, while fostering an ecosystem of lifelong learning and entrepreneurship.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Our Goal : Metrics / 1M youth etc -->
-    <div class="container" style="margin-bottom: 20px;">
+    <!-- Gaps Section -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">We exist to close Africa's skills gap</h2>
+            <p class="section-sub">The old model fails youth. MassiveShift bridges theory to income.</p>
+            <div class="gaps-grid">
+                <div class="gap-card"><i class="fas fa-hourglass-half"></i><h3>Slow & theoretical</h3><p>We teach only skills that lead directly to employment.</p></div>
+                <div class="gap-card"><i class="fas fa-chart-line"></i><h3>Youth exclusion</h3><p>Low-barrier entry opens doors to digital & green economy.</p></div>
+                <div class="gap-card"><i class="fas fa-tools"></i><h3>Lack of infrastructure</h3><p>Hands-on labs for solar, repair & tech.</p></div>
+                <div class="gap-card"><i class="fas fa-handshake"></i><h3>No mentorship</h3><p>Free College Community provides alumni networks & job leads.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact stats -->
+    <div class="container">
         <div class="goal-stats">
             <div class="stats-container">
                 <div class="goal-item"><div class="goal-number">100K+</div><div class="goal-label">Youth skilled by 2028</div></div>
-                <div class="goal-item"><div class="goal-number">5,000+</div><div class="goal-label">Innovators & entrepreneurs</div></div>
+                <div class="goal-item"><div class="goal-number">5,000+</div><div class="goal-label">Innovators empowered</div></div>
                 <div class="goal-item"><div class="goal-number">1 Million</div><div class="goal-label">Lives impacted</div></div>
-                <div class="goal-item"><div class="goal-number">80%</div><div class="goal-label">Job / business launch rate</div></div>
+                <div class="goal-item"><div class="goal-number">80%</div><div class="goal-label">Job / business launch</div></div>
             </div>
         </div>
     </div>
 
-    <!-- Infrastructure / Compute for Good analogue: "Training infrastructure for real trades" -->
+    <!-- Infrastructure -->
     <div class="container">
         <div class="infra-block">
             <div class="infra-text">
                 <h2>Infrastructure that powers employability</h2>
-                <p>MassiveShift provides modern workshops, solar lab, computer lab, and maker spaces that mirror real working environments. Students learn on equipment used by industry — from photovoltaic arrays to digital marketing suites.</p>
-                <div class="badge-tech">⚡ Founding Partners: local solar associations & tech hubs</div>
-                <p style="margin-top: 20px; font-weight: 500;">Through our College Community, learners access remote mentorship, job boards, and co-working hubs after graduation — at zero cost.</p>
+                <p>Modern workshops, solar lab, computer lab, and maker spaces that mirror real working environments. Students learn on industry equipment.</p>
+                <div class="badge-tech" style="background:#e6d5b8; display:inline-block; padding:6px 16px; border-radius:50px;">⚡ Founding Partners: local solar associations & tech hubs</div>
             </div>
             <div class="infra-icon">
                 <i class="fas fa-microchip"></i>
@@ -523,62 +544,52 @@
         </div>
     </div>
 
-    <!-- AISCA Programs style: Innovators, Researchers etc but adapted to our streams -->
-    <section id="programs">
+    <!-- Programs Section (with ID for nav) -->
+    <section id="programs-section">
         <div class="container">
             <h2 class="section-title">MassiveShift Programs</h2>
-            <p class="section-sub">Empowerment looks different for everyone — choose a track that leads to a job or your own venture.</p>
+            <p class="section-sub">Choose a track that leads to a job or your own venture.</p>
             <div class="programs-grid">
-                <div class="program-card">
-                    <div class="program-icon"><i class="fas fa-solar-panel"></i></div>
-                    <h3>Green Trades</h3>
-                    <p>Solar installation, maintenance & sales. 6 months, 70% hands-on. Graduate with certification & business toolkit.</p>
-                    <a href="#" class="program-link">Apply for Grant <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon"><i class="fas fa-laptop-code"></i></div>
-                    <h3>Digital Economy</h3>
-                    <p>Digital marketing, e-commerce, data analytics. 8-month intensive with real client projects and freelancing support.</p>
-                    <a href="#" class="program-link">Apply for Grant <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon"><i class="fas fa-mobile-alt"></i></div>
-                    <h3>Device Repair Pro</h3>
-                    <p>Smartphone & tablet repair, diagnostics, refurbishment. 4 months, earn while you learn model after internship.</p>
-                    <a href="#" class="program-link">Join Cohort <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon"><i class="fas fa-chalkboard-user"></i></div>
-                    <h3>Entrepreneurship Bootcamp</h3>
-                    <p>Business modeling, pricing, customer acquisition. 3 months with mentorship & micro-grant eligibility.</p>
-                    <a href="#" class="program-link">Reserve Seat <i class="fas fa-arrow-right"></i></a>
-                </div>
+                <div class="program-card"><div class="program-icon"><i class="fas fa-solar-panel"></i></div><h3>Green Trades</h3><p>Solar installation, maintenance & sales. 6 months, 70% hands-on.</p></div>
+                <div class="program-card"><div class="program-icon"><i class="fas fa-laptop-code"></i></div><h3>Digital Economy</h3><p>Digital marketing, e-commerce, data analytics. 8-month intensive.</p></div>
+                <div class="program-card"><div class="program-icon"><i class="fas fa-mobile-alt"></i></div><h3>Device Repair Pro</h3><p>Smartphone & tablet repair, diagnostics. 4 months.</p></div>
+                <div class="program-card"><div class="program-icon"><i class="fas fa-chalkboard-user"></i></div><h3>Entrepreneurship Bootcamp</h3><p>Business modeling, pricing, customer acquisition. 3 months.</p></div>
             </div>
         </div>
     </section>
 
-    <!-- College Community + mentorship (free / low-cost support) -->
+    <!-- Community CTA -->
     <div class="container" id="community">
         <div class="community-cta">
             <div class="community-text">
                 <h2><i class="fas fa-hand-holding-heart"></i> MassiveShift College Community</h2>
-                <p>Join a lifelong, free-to-access network of alumni, mentors, and industry pros. Job board, peer circles, monthly skillshares, and startup support — all at zero cost for graduates.</p>
-                <p style="margin-top: 12px;"><strong>Non-profit foundation:</strong> Mentorship, mental health circles, and free intro workshops open to local youth.</p>
+                <p>Join a lifelong, free-to-access network of alumni, mentors, and industry pros. Job board, peer circles — at zero cost for graduates.</p>
             </div>
-            <div>
-                <a href="#" class="btn btn-light"><i class="fab fa-whatsapp"></i> Join Community →</a>
-                <div style="margin-top: 12px;"><small>✔ Alumni mentorship ✔ Job leads ✔ Free workshops</small></div>
-            </div>
+            <div><a href="#" class="btn btn-light"><i class="fab fa-whatsapp"></i> Join Community →</a></div>
         </div>
     </div>
 
-    <!-- Why It Matters (similar to 'Why It Matters' row) -->
-    <section style="padding: 40px 0 80px;">
+    <!-- Contact Section (new) -->
+    <section id="contact">
         <div class="container">
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 48px; text-align: center;">
-                <div><i class="fas fa-bolt" style="font-size: 2rem; color:#f39c12;"></i><h3 style="margin-top: 12px;">Faster Employment</h3><p>4-12 months to earning</p></div>
-                <div><i class="fas fa-charging-station" style="font-size: 2rem; color:#f39c12;"></i><h3 style="margin-top: 12px;">Reduced barriers</h3><p>Need-based scholarships & flexible payment</p></div>
-                <div><i class="fas fa-people-arrows" style="font-size: 2rem; color:#f39c12;"></i><h3 style="margin-top: 12px;">Local ownership</h3><p>African-led curriculum, African employers</p></div>
+            <h2 class="section-title">Get in Touch</h2>
+            <p class="section-sub">Ready to shift your future? Reach out for admissions, partnerships, or community support.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 48px; justify-content: center;">
+                <div style="background: #f9fbfd; padding: 32px; border-radius: 32px; min-width: 260px;">
+                    <i class="fas fa-map-marker-alt" style="font-size: 2rem; color:#f39c12;"></i>
+                    <h3>Visit Us</h3>
+                    <p>Lusaka, Zambia<br>Great East Road, opposite UNZA</p>
+                </div>
+                <div style="background: #f9fbfd; padding: 32px; border-radius: 32px; min-width: 260px;">
+                    <i class="fas fa-envelope" style="font-size: 2rem; color:#f39c12;"></i>
+                    <h3>Email</h3>
+                    <p>hello@massiveshift.academy<br>admissions@massiveshift.academy</p>
+                </div>
+                <div style="background: #f9fbfd; padding: 32px; border-radius: 32px; min-width: 260px;">
+                    <i class="fas fa-phone-alt" style="font-size: 2rem; color:#f39c12;"></i>
+                    <h3>Call / WhatsApp</h3>
+                    <p>+260 97 123 4567<br>Mon-Fri, 9am–5pm</p>
+                </div>
             </div>
         </div>
     </section>
@@ -587,38 +598,50 @@
 <footer>
     <div class="container">
         <div class="footer-grid">
-            <div>
-                <h3 style="font-weight:800;">MassiveShift</h3>
-                <p>Job-focused College Academy & Community<br>Reshaping private education for Africa’s young population.</p>
-                <div style="margin-top: 16px;">
-                    <i class="fab fa-linkedin" style="margin-right: 12px;"></i>
-                    <i class="fab fa-facebook" style="margin-right: 12px;"></i>
-                    <i class="fab fa-instagram"></i>
-                </div>
-            </div>
-            <div><h4>Explore</h4><a href="#" style="display:block; color:#4a627a;">Programs</a><a href="#" style="display:block; color:#4a627a;">Community</a><a href="#" style="display:block; color:#4a627a;">For Employers</a></div>
-            <div><h4>Legal</h4><a href="#" style="display:block; color:#4a627a;">Privacy</a><a href="#" style="display:block; color:#4a627a;">TEVETA Registration</a></div>
-            <div><h4>Contact</h4><p>📍 Lusaka, Zambia<br>✉️ hello@massiveshift.academy</p></div>
+            <div><h3 style="font-weight:800;">MassiveShift</h3><p>Job-focused College Academy & Community<br>Reshaping private education for Africa.</p></div>
+            <div><h4>Quick links</h4><a href="#home" style="display:block;">Home</a><a href="#about" style="display:block;">About</a><a href="#programs-section" style="display:block;">Programs</a><a href="#contact" style="display:block;">Contact</a></div>
+            <div><h4>Legal</h4><a href="#">Privacy</a><a href="#" style="display:block;">TEVETA Registration</a></div>
         </div>
-        <div class="footer-copyright">
-            © 2025 MassiveShift College Academy Ltd — Building Africa’s skilled workforce. All rights reserved.
-        </div>
+        <div class="footer-copyright">© 2025 MassiveShift College Academy Ltd — Building Africa’s skilled workforce.</div>
     </div>
 </footer>
 
-<!-- Simple smooth scroll -->
+<!-- FLOATING BOTTOM NAVIGATION: Home, About, Programs, Contact -->
+<div class="floating-bottom-nav">
+    <a href="#home" class="nav-item" data-nav="home"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="#about" class="nav-item" data-nav="about"><i class="fas fa-info-circle"></i><span>About</span></a>
+    <a href="#programs-section" class="nav-item" data-nav="programs"><i class="fas fa-graduation-cap"></i><span>Programs</span></a>
+    <a href="#contact" class="nav-item" data-nav="contact"><i class="fas fa-envelope"></i><span>Contact</span></a>
+</div>
+
 <script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if(href === "#") return;
-            const target = document.querySelector(href);
-            if(target) {
-                e.preventDefault();
-                target.scrollIntoView({ behavior: 'smooth' });
+    // Highlight active nav item based on scroll position
+    const sections = document.querySelectorAll('#home, #about, #programs-section, #contact');
+    const navItems = document.querySelectorAll('.nav-item');
+
+    function updateActiveNav() {
+        let current = '';
+        const scrollPosition = window.scrollY + 150; // offset for sticky header
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                current = section.getAttribute('id');
             }
         });
-    });
+
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            const href = item.getAttribute('href').substring(1);
+            if (href === current) {
+                item.classList.add('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', updateActiveNav);
+    window.addEventListener('load', updateActiveNav);
 </script>
 </body>
 </html>
