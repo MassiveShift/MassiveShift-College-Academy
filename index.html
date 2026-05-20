@@ -1484,7 +1484,8 @@
 <div class="page-transition" id="pageTransition"></div>
 <div class="scroll-top" id="scrollTop">↑</div>
 <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMessage"></span></div>
-<script>
+
+  <script>
   // ========================================
   // VIDEO CAROUSEL
   // ========================================
@@ -1594,13 +1595,14 @@
   }
   
   // ========================================
-  // APPLICATION SYSTEM (ADAPTED FOR MASSIVESHIFT)
+  // APPLICATION SYSTEM WITH REAL PAYMENT REDIRECTS
   // ========================================
-  // Wait for DOM to be fully loaded
   document.addEventListener('DOMContentLoaded', function() {
     let currentSection = 1;
     const totalSections = 7;
     let paymentCompleted = false;
+    let paymentVerified = false;
+    let paymentStatusText = 'pending';
     let selectedResident = 'local';
     let selectedPaymentMethod = 'airtel';
     let selectedSchool = '';
@@ -1608,7 +1610,7 @@
     
     // Get Apply page elements
     const applyPage = document.getElementById('apply-page');
-    if (!applyPage) return; // Exit if Apply page not found
+    if (!applyPage) return;
     
     const sections = applyPage.querySelectorAll('.form-section');
     const steps = applyPage.querySelectorAll('#progressSteps .step');
@@ -1632,6 +1634,10 @@
     const feeAmount = applyPage.querySelector('#feeAmount');
     const feeNote = applyPage.querySelector('#feeNote');
     
+    // Bank Transfer Elements
+    const bankDetails = applyPage.querySelector('#bankDetails');
+    const paymentProofInput = applyPage.querySelector('#paymentProof');
+    
     function showToastMessage(message, isError = false) {
       if (!toastMsg || !toastEl) return;
       toastMsg.textContent = message;
@@ -1648,6 +1654,14 @@
       } else {
         feeAmount.innerHTML = '$15 USD';
         feeNote.innerHTML = 'for international applicants';
+      }
+    }
+    
+    function updatePaymentMethodUI() {
+      if (selectedPaymentMethod === 'bank') {
+        if (bankDetails) bankDetails.style.display = 'block';
+      } else {
+        if (bankDetails) bankDetails.style.display = 'none';
       }
     }
     
@@ -1679,7 +1693,7 @@
       });
     }
     
-    // Resident & Payment Selection
+    // Resident Selection
     if (residentOptions.length > 0) {
       residentOptions.forEach(option => {
         option.addEventListener('click', () => {
@@ -1692,49 +1706,173 @@
       });
     }
     
+    // Payment Method Selection with UI update
     if (paymentMethods.length > 0) {
       paymentMethods.forEach(method => {
         method.addEventListener('click', () => {
           paymentMethods.forEach(m => m.classList.remove('selected'));
           method.classList.add('selected');
           selectedPaymentMethod = method.dataset.method;
+          updatePaymentMethodUI();
           saveToLocal();
         });
       });
     }
     
-    function processPayment() {
+    // ========================================
+    // REAL PAYMENT PROCESSING - REDIRECT TO GATEWAY FILES
+    // ========================================
+    function processRealPayment() {
       const firstName = applyPage.querySelector('#firstName')?.value;
       const lastName = applyPage.querySelector('#lastName')?.value;
       const email = applyPage.querySelector('#email')?.value;
+      const phone = applyPage.querySelector('#phone')?.value;
       const country = applyPage.querySelector('#country')?.value;
       
-      if (!firstName || !lastName || !email || !country) {
+      // Validate personal info
+      if (!firstName || !lastName || !email || !phone || !country) {
         showToastMessage('Please complete all required fields in Personal Information first', true);
+        currentSection = 2;
+        updateFormDisplay();
         return;
       }
       
+      // Validate program selected
       if (!selectedSchool || !programSelect?.value) {
         showToastMessage('Please select a program first', true);
+        currentSection = 1;
+        updateFormDisplay();
         return;
       }
       
-      paymentCompleted = true;
-      localStorage.setItem('applicationFeePaid', 'true');
-      if (paymentStatus) {
-        paymentStatus.style.display = 'block';
-        paymentStatus.className = 'payment-status paid';
-        paymentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Payment confirmed! You can now complete your application.';
+      const amount = selectedResident === 'local' ? '150' : '15';
+      const currency = selectedResident === 'local' ? 'ZMW' : 'USD';
+      const applicantName = `${firstName} ${lastName}`;
+      const applicantEmail = email;
+      const applicantPhone = phone;
+      const selectedProgram = programSelect.value;
+      
+      // Save pending application data
+      localStorage.setItem('pendingApplication', JSON.stringify({
+        firstName, lastName, email, phone: applicantPhone,
+        country, selectedSchool, selectedProgram, amount, currency,
+        applicantName, applicantEmail, paymentMethod: selectedPaymentMethod
+      }));
+      
+      // Handle Bank Transfer separately (proof upload, no redirect)
+      if (selectedPaymentMethod === 'bank') {
+        const proofFile = paymentProofInput?.files[0];
+        if (!proofFile) {
+          showToastMessage('Please upload proof of payment for bank transfer', true);
+          return;
+        }
+        
+        // Simulate saving proof (in real implementation, upload to server)
+        localStorage.setItem('paymentProofPending', 'true');
+        localStorage.setItem('paymentProofFileName', proofFile.name);
+        paymentCompleted = true;
+        paymentVerified = false;
+        paymentStatusText = 'pending';
+        localStorage.setItem('applicationFeePaid', 'pending');
+        
+        if (paymentStatus) {
+          paymentStatus.style.display = 'block';
+          paymentStatus.className = 'payment-status pending';
+          paymentStatus.innerHTML = '<i class="fas fa-clock"></i> Bank transfer proof uploaded. Waiting for verification. You can continue filling the form, but submission requires verified payment.';
+        }
+        unlockSections();
+        const step3 = applyPage.querySelector('#progressSteps .step[data-step="3"]');
+        if (step3) step3.classList.add('payment-paid');
+        saveToLocal();
+        showToastMessage('Bank transfer proof uploaded. You will receive email when verified.');
+        
+        if (currentSection < totalSections) {
+          currentSection++;
+          updateFormDisplay();
+        }
+        return;
       }
-      unlockSections();
-      const step3 = applyPage.querySelector('#progressSteps .step[data-step="3"]');
-      if (step3) step3.classList.add('payment-paid');
-      saveToLocal();
-      showToastMessage('Payment confirmed! You can now continue with your application.');
+      
+      // For mobile money and other methods: redirect to payment gateway
+      let paymentUrl = '';
+      const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+      
+      switch(selectedPaymentMethod) {
+        case 'airtel':
+          paymentUrl = `airtel-money.html?amount=${amount}&currency=${currency}&name=${encodeURIComponent(applicantName)}&email=${applicantEmail}&phone=${applicantPhone}`;
+          break;
+        case 'mtn':
+          paymentUrl = `mtn-money.html?amount=${amount}&currency=${currency}&name=${encodeURIComponent(applicantName)}&email=${applicantEmail}&phone=${applicantPhone}`;
+          break;
+        case 'zamtel':
+          paymentUrl = `zamtel-money.html?amount=${amount}&currency=${currency}&name=${encodeURIComponent(applicantName)}&email=${applicantEmail}&phone=${applicantPhone}`;
+          break;
+        case 'card':
+          paymentUrl = `card-payment.html?amount=${amount}&currency=${currency}&name=${encodeURIComponent(applicantName)}&email=${applicantEmail}`;
+          break;
+        case 'paypal':
+          paymentUrl = `paypal.html?amount=${amount}&currency=${currency}&name=${encodeURIComponent(applicantName)}&email=${applicantEmail}`;
+          break;
+        default:
+          showToastMessage('Please select a payment method', true);
+          return;
+      }
+      
+      // Redirect to payment gateway
+      window.location.href = paymentUrl;
     }
     
     if (payNowBtn) {
-      payNowBtn.addEventListener('click', processPayment);
+      payNowBtn.addEventListener('click', processRealPayment);
+    }
+    
+    // ========================================
+    // CHECK PAYMENT STATUS ON RETURN FROM GATEWAY
+    // ========================================
+    function checkPaymentStatus() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paymentSuccess = urlParams.get('payment') === 'success';
+      const refCode = urlParams.get('ref');
+      const isPending = urlParams.get('pending') === 'true';
+      
+      const storedPaid = localStorage.getItem('applicationFeePaid');
+      const storedRef = refCode ? localStorage.getItem(`verified_${refCode}`) : null;
+      
+      if (paymentSuccess || storedPaid === 'true') {
+        paymentCompleted = true;
+        paymentVerified = true;
+        paymentStatusText = 'verified';
+        localStorage.setItem('applicationFeePaid', 'true');
+        if (paymentStatus) {
+          paymentStatus.style.display = 'block';
+          paymentStatus.className = 'payment-status paid';
+          paymentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Payment confirmed! You can now complete your application.';
+        }
+        unlockSections();
+        const step3 = applyPage.querySelector('#progressSteps .step[data-step="3"]');
+        if (step3) step3.classList.add('payment-paid');
+        showToastMessage('Payment confirmed! You can now continue with your application.');
+        // Clear the URL parameters
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } 
+      else if (storedPaid === 'pending') {
+        paymentCompleted = true;
+        paymentVerified = false;
+        paymentStatusText = 'pending';
+        if (paymentStatus) {
+          paymentStatus.style.display = 'block';
+          paymentStatus.className = 'payment-status pending';
+          paymentStatus.innerHTML = '<i class="fas fa-clock"></i> Bank transfer proof uploaded. Waiting for admin verification.';
+        }
+        unlockSections();
+      }
+      else if (storedRef === 'rejected') {
+        if (paymentStatus) {
+          paymentStatus.style.display = 'block';
+          paymentStatus.className = 'payment-status pending';
+          paymentStatus.innerHTML = '<i class="fas fa-times-circle"></i> Payment proof rejected. Please contact admissions.';
+        }
+      }
     }
     
     function unlockSections() {
@@ -1744,21 +1882,6 @@
       const agreeSubmit = applyPage.querySelector('#agreeSubmit');
       if (agreeTerms) agreeTerms.disabled = false;
       if (agreeSubmit) agreeSubmit.disabled = false;
-    }
-    
-    function checkPaymentStatus() {
-      const paid = localStorage.getItem('applicationFeePaid');
-      if (paid === 'true') {
-        paymentCompleted = true;
-        if (paymentStatus) {
-          paymentStatus.style.display = 'block';
-          paymentStatus.className = 'payment-status paid';
-          paymentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Payment confirmed! You can now complete your application.';
-        }
-        unlockSections();
-        const step3 = applyPage.querySelector('#progressSteps .step[data-step="3"]');
-        if (step3) step3.classList.add('payment-paid');
-      }
     }
     
     function updateFormDisplay() {
@@ -1846,7 +1969,7 @@
         <div class="review-section">
           <h3><i class="fas fa-credit-card"></i> Payment Information</h3>
           <div class="review-item"><span class="review-label">Application Fee:</span><span>${selectedResident === 'local' ? 'ZK150' : '$15 USD'}</span></div>
-          <div class="review-item"><span class="review-label">Payment Status:</span><span style="color: var(--success);">✓ Paid</span></div>
+          <div class="review-item"><span class="review-label">Payment Status:</span><span style="color: var(--success);">✓ ${paymentVerified ? 'Verified' : 'Completed'}</span></div>
         </div>
       `;
     }
@@ -1873,30 +1996,55 @@
       e.preventDefault();
       const agreeTerms = applyPage.querySelector('#agreeTerms');
       const agreeSubmit = applyPage.querySelector('#agreeSubmit');
+      
       if (!agreeTerms?.checked || !agreeSubmit?.checked) {
         showToastMessage('Please agree to the terms and conditions', true);
         return;
       }
+      
+      // Check if payment is verified (not just completed)
+      const paidStatus = localStorage.getItem('applicationFeePaid');
+      if (paidStatus !== 'true') {
+        showToastMessage('Your payment is not yet verified. Please complete payment or wait for verification.', true);
+        return;
+      }
+      
       const submitButton = applyPage.querySelector('#submitBtn');
       if (submitButton) {
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
         submitButton.disabled = true;
       }
+      
+      // Here you would send data to your backend
       setTimeout(() => {
         showToastMessage('Application submitted successfully! You will receive a confirmation email.');
         localStorage.removeItem('massiveshiftApplication');
         localStorage.removeItem('applicationFeePaid');
+        localStorage.removeItem('paymentProofPending');
         if (submitButton) {
           submitButton.innerHTML = 'Submit Application';
           submitButton.disabled = false;
         }
+        // Optionally redirect to thank you page
+        // window.location.href = 'thank-you.html';
       }, 2000);
     }
     
     function saveToLocal() {
-      const formData = { selectedSchool, selectedProgram: programSelect?.value, selectedResident, selectedPaymentMethod, paymentCompleted, currentSection };
+      const formData = { 
+        selectedSchool, 
+        selectedProgram: programSelect?.value, 
+        selectedResident, 
+        selectedPaymentMethod, 
+        paymentCompleted, 
+        paymentVerified,
+        paymentStatusText,
+        currentSection 
+      };
       const inputs = applicationForm?.querySelectorAll('input, select, textarea');
-      inputs?.forEach(input => { if (input.name) formData[input.name] = input.value; });
+      inputs?.forEach(input => { 
+        if (input.name && input.type !== 'file') formData[input.name] = input.value; 
+      });
       localStorage.setItem('massiveshiftApplication', JSON.stringify(formData));
     }
     
@@ -1912,8 +2060,17 @@
         }
         if (data.selectedResident) {
           selectedResident = data.selectedResident;
-          residentOptions.forEach(opt => { if (opt.dataset.resident === selectedResident) opt.classList.add('selected'); });
+          residentOptions.forEach(opt => { 
+            if (opt.dataset.resident === selectedResident) opt.classList.add('selected'); 
+          });
           updateFee();
+        }
+        if (data.selectedPaymentMethod) {
+          selectedPaymentMethod = data.selectedPaymentMethod;
+          paymentMethods.forEach(method => {
+            if (method.dataset.method === selectedPaymentMethod) method.classList.add('selected');
+          });
+          updatePaymentMethodUI();
         }
         if (data.currentSection) currentSection = data.currentSection;
         updateFormDisplay();
@@ -1961,6 +2118,7 @@
     updateFormDisplay();
     if (residentOptions[0]) residentOptions[0].classList.add('selected');
     if (paymentMethods[0]) paymentMethods[0].classList.add('selected');
+    updatePaymentMethodUI();
   });
   
   // ========================================
@@ -2016,6 +2174,6 @@
     scrollTop.addEventListener('click', () => window.scrollTo(0, 0));
   }
   updateActive('home');
-</script>
+  </script>                    
 </body>
   </html>
