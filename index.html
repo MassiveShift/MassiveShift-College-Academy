@@ -1109,6 +1109,139 @@
       }
                        }
     
+      /* ========================================
+       ORIGINAL PROGRAMS GRID (6 cards)
+    ======================================== */
+    .original-programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .original-program-card {
+      background: white;
+      border-radius: 24px;
+      padding: 28px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .original-program-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    .original-icon {
+      font-size: 40px;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    
+    .original-program-card h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    
+    .program-duration {
+      font-size: 0.8rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .program-description {
+      font-size: 0.9rem;
+      color: var(--gray-dark);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    
+    .program-features-mini {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-top: 8px;
+      border-top: 1px solid var(--gray-mid);
+    }
+    
+    .program-features-mini span {
+      background: var(--soft);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      color: var(--gray-dark);
+    }
+    
+    /* ========================================
+       ONLINE PROGRAMS GRID (4 cards)
+    ======================================== */
+    .online-programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .online-program-card {
+      background: white;
+      border-radius: 24px;
+      padding: 28px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .online-program-card.featured {
+      border-top: 4px solid var(--gold);
+    }
+    
+    .online-program-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    .new-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--gold);
+      color: var(--navy);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    
+    .online-icon {
+      font-size: 40px;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    
+    .online-program-card h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+      padding-right: 50px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .original-programs-grid, .online-programs-grid {
+        grid-template-columns: 1fr;
+      }
+      .online-program-card h3 {
+        padding-right: 0;
+      }
+      }
   </style>
 </head>
 <body>
@@ -1459,19 +1592,359 @@
     </section>
   </div>
 
-  <!-- PROGRAMS DETAIL PAGE -->
+    <!-- PROGRAMS DETAIL PAGE - COMPLETE WITH ORIGINAL + NEW ONLINE PROGRAMS -->
   <div id="programs-page" class="page">
     <div class="navbar-spacer"></div>
-    <div class="page-header"><div class="container"><h1>Our Programs</h1><p style="margin-top: 15px;">Business, Entrepreneurship & Job-Focused. 4–12 weeks. Hands-on. Practical. Affordable.</p></div></div>
+    
+    <!-- Hero Section for Programs Page -->
+    <div class="page-header" style="background: linear-gradient(135deg, #07152d 0%, #0d2348 100%);">
+      <div class="container">
+        <h1>Our Programs</h1>
+        <p style="margin-top: 15px; max-width: 700px; margin-left: auto; margin-right: auto;">Choose from intensive in-person short courses or online-first programs designed for real outcomes.</p>
+      </div>
+    </div>
+    
+    <!-- Section Title: In-Person Short Courses -->
+    <div class="container" style="margin-top: 60px;">
+      <div class="section-title">
+        <span>Original Programs</span>
+        <h2>In-Person Short Courses</h2>
+        <p>4–12 weeks. Hands-on. Practical. Affordable.</p>
+      </div>
+    </div>
+
+    <!-- ORIGINAL PROGRAMS GRID (In-Person) -->
     <section class="section">
       <div class="container">
-        <div class="services-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px;">
-          <div class="service-card" style="background: white; padding: 40px; border-radius: 28px;"><div class="service-icon">🏢</div><h3>Business Administration</h3><p>6 weeks. Office management, customer service, operations, workplace communication.</p><div class="program-duration" style="color:#f39c12; margin-top: 16px; font-weight:600;">💰 Affordable | Next intake: [Date]</div></div>
-          <div class="service-card" style="background: white; padding: 40px; border-radius: 28px;"><div class="service-icon">🚀</div><h3>Entrepreneurship</h3><p>4 weeks. Business modeling, pricing, customer acquisition, financial literacy, registration.</p><div class="program-duration" style="color:#f39c12; margin-top: 16px; font-weight:600;">💰 Affordable | Next intake: [Date]</div></div>
-          <div class="service-card" style="background: white; padding: 40px; border-radius: 28px;"><div class="service-icon">☀️</div><h3>Solar Business</h3><p>6 weeks. Solar installation, maintenance, sales. Start your own solar business or get hired.</p><div class="program-duration" style="color:#f39c12; margin-top: 16px; font-weight:600;">💰 Affordable | Next intake: [Date]</div></div>
-          <div class="service-card" style="background: white; padding: 40px; border-radius: 28px;"><div class="service-icon">💻</div><h3>Digital Business</h3><p>8 weeks. Digital marketing, social media management, e-commerce, content creation.</p><div class="program-duration" style="color:#f39c12; margin-top: 16px; font-weight:600;">💰 Affordable | Next intake: [Date]</div></div>
-          <div class="service-card" style="background: white; padding: 40px; border-radius: 28px;"><div class="service-icon">📱</div><h3>Mobile Repair Business</h3><p>4 weeks. Smartphone repair, diagnostics, refurbishment. Business setup included.</p><div class="program-duration" style="color:#f39c12; margin-top: 16px; font-weight:600;">💰 Affordable | Next intake: [Date]</div></div>
-          <div class="service-card" style="background: white; padding: 40px; border-radius: 28px;"><div class="service-icon">📊</div><h3>Sales & Marketing</h3><p>6 weeks. Sales techniques, CRM, digital marketing fundamentals.</p><div class="program-duration" style="color:#f39c12; margin-top: 16px; font-weight:600;">💰 Affordable | Next intake: [Date]</div></div>
+        <div class="original-programs-grid">
+          <!-- Original Program 1: Business Administration -->
+          <div class="original-program-card">
+            <div class="original-icon"><i class="fas fa-building"></i></div>
+            <h3>Business Administration</h3>
+            <p class="program-duration">6 weeks | In-Person</p>
+            <p class="program-description">Office management, customer service, operations, and workplace communication.</p>
+            <div class="program-features-mini">
+              <span>📋 Certificate</span>
+              <span>👥 Small class</span>
+              <span>💼 Job-ready</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- Original Program 2: Entrepreneurship -->
+          <div class="original-program-card">
+            <div class="original-icon"><i class="fas fa-lightbulb"></i></div>
+            <h3>Entrepreneurship</h3>
+            <p class="program-duration">4 weeks | In-Person</p>
+            <p class="program-description">Business modeling, pricing, customer acquisition, financial literacy, and registration.</p>
+            <div class="program-features-mini">
+              <span>📋 Certificate</span>
+              <span>🚀 Start business</span>
+              <span>💰 Micro-grant eligible</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- Original Program 3: Solar Business -->
+          <div class="original-program-card">
+            <div class="original-icon"><i class="fas fa-solar-panel"></i></div>
+            <h3>Solar Business</h3>
+            <p class="program-duration">6 weeks | In-Person</p>
+            <p class="program-description">Solar installation, maintenance, and sales. Start your own solar business or get hired.</p>
+            <div class="program-features-mini">
+              <span>📋 Certificate</span>
+              <span>☀️ Green economy</span>
+              <span>🔧 Hands-on</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- Original Program 4: Digital Business -->
+          <div class="original-program-card">
+            <div class="original-icon"><i class="fas fa-laptop"></i></div>
+            <h3>Digital Business</h3>
+            <p class="program-duration">8 weeks | In-Person</p>
+            <p class="program-description">Digital marketing, social media management, e-commerce, and content creation.</p>
+            <div class="program-features-mini">
+              <span>📋 Certificate</span>
+              <span>📱 Digital skills</span>
+              <span>💼 Freelance ready</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- Original Program 5: Mobile Repair Business -->
+          <div class="original-program-card">
+            <div class="original-icon"><i class="fas fa-mobile-alt"></i></div>
+            <h3>Mobile Repair Business</h3>
+            <p class="program-duration">4 weeks | In-Person</p>
+            <p class="program-description">Smartphone repair, diagnostics, and refurbishment. Business setup included.</p>
+            <div class="program-features-mini">
+              <span>📋 Certificate</span>
+              <span>🔧 Hands-on</span>
+              <span>🏪 Start shop</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- Original Program 6: Sales & Marketing -->
+          <div class="original-program-card">
+            <div class="original-icon"><i class="fas fa-chart-line"></i></div>
+            <h3>Sales & Marketing</h3>
+            <p class="program-duration">6 weeks | In-Person</p>
+            <p class="program-description">Sales techniques, customer relationship management, and digital marketing fundamentals.</p>
+            <div class="program-features-mini">
+              <span>📋 Certificate</span>
+              <span>📊 High-demand</span>
+              <span>💼 Corporate ready</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Title: New Online-First Programs -->
+    <div class="container" style="margin-top: 40px;">
+      <div class="section-title">
+        <span>New Launch</span>
+        <h2>Online-First Programs</h2>
+        <p>Fully online. Flexible. Global opportunities.</p>
+      </div>
+    </div>
+
+    <!-- NEW ONLINE PROGRAMS -->
+    <section class="section section-soft">
+      <div class="container">
+        <div class="online-programs-grid">
+          <!-- New Program 1: Tech Accelerate Online -->
+          <div class="online-program-card featured">
+            <div class="new-badge"><i class="fas fa-star"></i> NEW</div>
+            <div class="online-icon"><i class="fas fa-laptop-code"></i></div>
+            <h3>Tech Accelerate Online</h3>
+            <p class="program-duration">12 weeks | Fully Online</p>
+            <p class="program-description">Short-term, high-intensity AI, fintech, and web development training. Build real projects and graduate with a professional portfolio.</p>
+            <div class="program-features-mini">
+              <span>💻 Coding</span>
+              <span>🤖 AI Basics</span>
+              <span>💳 Fintech</span>
+              <span>📁 Portfolio</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- New Program 2: LaunchPad Virtual Labs -->
+          <div class="online-program-card featured">
+            <div class="new-badge"><i class="fas fa-star"></i> NEW</div>
+            <div class="online-icon"><i class="fas fa-rocket"></i></div>
+            <h3>LaunchPad Virtual Labs</h3>
+            <p class="program-duration">10 weeks | Fully Online</p>
+            <p class="program-description">Hands-on programs for students and early-stage entrepreneurs to launch MVPs. Work in teams, validate ideas, and present at Virtual Demo Day.</p>
+            <div class="program-features-mini">
+              <span>🚀 MVP</span>
+              <span>📊 Lean Startup</span>
+              <span>🎤 Demo Day</span>
+              <span>🤝 Team work</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- New Program 3: Connect & Grow Online -->
+          <div class="online-program-card featured">
+            <div class="new-badge"><i class="fas fa-star"></i> NEW</div>
+            <div class="online-icon"><i class="fas fa-handshake"></i></div>
+            <h3>Connect & Grow Online</h3>
+            <p class="program-duration">Ongoing | Fully Online</p>
+            <p class="program-description">Connect founders, students, and professionals with experienced mentors for technical guidance, career advice, and startup support.</p>
+            <div class="program-features-mini">
+              <span>👥 1:1 Mentorship</span>
+              <span>📚 Workshops</span>
+              <span>🎯 Career advice</span>
+              <span>🌐 Network</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Join as Mentee →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="contact">Become Mentor</a>
+            </div>
+          </div>
+
+          <!-- New Program 4: Global Talent Bridge Online -->
+          <div class="online-program-card featured">
+            <div class="new-badge"><i class="fas fa-star"></i> NEW</div>
+            <div class="online-icon"><i class="fas fa-globe"></i></div>
+            <h3>Global Talent Bridge Online</h3>
+            <p class="program-duration">8 weeks | Fully Online</p>
+            <p class="program-description">Train and deploy Zambian tech talent to remote jobs worldwide. Work with real clients, build your portfolio, and get matched with global employers.</p>
+            <div class="program-features-mini">
+              <span>🌍 Remote work</span>
+              <span>📁 Portfolio</span>
+              <span>💼 Job placement</span>
+              <span>💰 Freelance</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply for Training →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="contact">Hire Talent</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPLETE COMPARISON TABLE (ALL 10 PROGRAMS) -->
+    <section class="comparison-section">
+      <div class="container">
+        <div class="section-title">
+          <span>Compare All Programs</span>
+          <h2>Find Your Perfect Fit</h2>
+          <p style="max-width: 700px; margin: 16px auto 0;">10 programs across in-person and online formats. Compare duration, format, and outcomes below.</p>
+        </div>
+        
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Program</th>
+                <th>Duration</th>
+                <th>Format</th>
+                <th>Primary Outcome</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Original Programs -->
+              <tr style="background: var(--soft);"><td colspan="5" style="font-weight: 700; color: var(--navy);">📚 IN-PERSON SHORT COURSES</td></tr>
+              <tr><td>Business Administration</td><td>6 weeks</td><td>In-Person</td><td>Corporate job ready</td><td><a href="#" class="btn-table" data-page="apply">Apply →</a></td></tr>
+              <tr><td>Entrepreneurship</td><td>4 weeks</td><td>In-Person</td><td>Launch your business</td><td><a href="#" class="btn-table" data-page="apply">Apply →</a></td></tr>
+              <tr><td>Solar Business</td><td>6 weeks</td><td>In-Person</td><td>Solar installation + business</td><td><a href="#" class="btn-table" data-page="apply">Apply →</a></td></tr>
+              <tr><td>Digital Business</td><td>8 weeks</td><td>In-Person</td><td>Digital marketing skills</td><td><a href="#" class="btn-table" data-page="apply">Apply →</a></td></tr>
+              <tr><td>Mobile Repair Business</td><td>4 weeks</td><td>In-Person</td><td>Start repair shop</td><td><a href="#" class="btn-table" data-page="apply">Apply →</a></td></tr>
+              <tr><td>Sales & Marketing</td><td>6 weeks</td><td>In-Person</td><td>Sales professional</td><td><a href="#" class="btn-table" data-page="apply">Apply →</a></td></tr>
+              
+              <!-- New Online Programs -->
+              <tr style="background: var(--soft);"><td colspan="5" style="font-weight: 700; color: var(--navy);">💻 ONLINE-FIRST PROGRAMS</td></tr>
+              <tr><td>Tech Accelerate Online <span style="background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 12px; font-size: 10px; margin-left: 8px;">NEW</span></td><td>12 weeks</td><td>Fully Online</td><td>Portfolio + Remote tech job</td><td><a href="#" class="btn-table" data-page="apply">Apply →</a></td></tr>
+              <tr><td>LaunchPad Virtual Labs <span style="background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 12px; font-size: 10px; margin-left: 8px;">NEW</span></td><td>10 weeks</td><td>Fully Online</td><td>MVP + Pitch deck</td><td><a href="#" class="btn-table" data-page="apply">Apply →</a></td></tr>
+              <tr><td>Connect & Grow Online <span style="background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 12px; font-size: 10px; margin-left: 8px;">NEW</span></td><td>Ongoing</td><td>Fully Online</td><td>Mentorship + Career plan</td><td><a href="#" class="btn-table" data-page="apply">Join →</a></td></tr>
+              <tr><td>Global Talent Bridge Online <span style="background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 12px; font-size: 10px; margin-left: 8px;">NEW</span></td><td>8 weeks</td><td>Fully Online</td><td>Remote job placement</td><td><a href="#" class="btn-table" data-page="apply">Apply →</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section section-soft">
+      <div class="container">
+        <div class="section-title">
+          <span>Common Questions</span>
+          <h2>Frequently Asked Questions</h2>
+        </div>
+        
+        <div class="faq-grid">
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle"></i>
+              <span>What's the difference between in-person and online programs?</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>In-person programs (4-12 weeks) are held at our Lusaka campus with hands-on practical training. Online programs are fully remote with live sessions, self-paced learning, and global opportunities. Choose based on your schedule and learning preference.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle"></i>
+              <span>Can I take both in-person and online programs?</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Yes! Many students start with in-person short courses, then progress to online programs. Your certificates stack and credits may transfer between programs.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle"></i>
+              <span>Do I need prior experience for any program?</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>No. Our in-person programs start from basics. Tech Accelerate Online requires basic computer literacy. LaunchPad requires only an idea. Connect & Grow is for all levels.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle"></i>
+              <span>Will I get a certificate for completing any program?</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Yes. Every program includes a MassiveShift College Academy certificate. Online programs also include digital badges for LinkedIn and portfolio development.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle"></i>
+              <span>How do I apply for multiple programs?</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Submit one application and indicate your preferred programs. Our admissions team will help you create a learning pathway that combines multiple programs.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <i class="fas fa-question-circle"></i>
+              <span>What is the cost of each program?</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>In-person short courses: ZK3,000 - ZK8,000 depending on duration. Online programs: $15 USD application fee + affordable tuition. Contact admissions for detailed fee structure and payment plans.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta-section">
+      <div class="container">
+        <div class="final-cta-card">
+          <h2>Ready to Start Your Journey?</h2>
+          <p>Choose from 10 programs across in-person and online formats. All programs are practical, skill-driven, and designed for real outcomes.</p>
+          <div class="final-cta-buttons">
+            <a href="#" class="btn-large-gold" data-page="apply">Apply Now →</a>
+            <a href="#" class="btn-large-outline" data-page="contact">Contact Admissions</a>
+          </div>
+          <p class="small-note">Limited spots available. Early application recommended.</p>
         </div>
       </div>
     </section>
