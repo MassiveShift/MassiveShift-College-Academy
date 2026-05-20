@@ -967,6 +967,148 @@
     .add-activity-btn { background: var(--gold-10); color: var(--gold-dark); border: 1px dashed var(--gold); padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 8px; }
 
     @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .form-group.full-width { grid-column: span 1; } .resident-selector { flex-direction: column; } .schools-grid { grid-template-columns: 1fr; } }
+      /* FEATURED PROGRAMS SECTION */
+    .featured-programs-section {
+      padding: 80px 0;
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    }
+
+    .featured-programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .featured-program-card {
+      background: white;
+      border-radius: 28px;
+      padding: 32px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-program-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      border-color: var(--gold-10);
+    }
+
+    .program-badge {
+      display: inline-block;
+      background: var(--gold-10);
+      color: var(--gold-dark);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .program-icon-large {
+      font-size: 48px;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .featured-program-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .program-skills {
+      font-size: 0.85rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .program-description {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--gray-dark);
+      margin-bottom: 20px;
+    }
+
+    .program-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-mid);
+    }
+
+    .program-features span {
+      font-size: 0.75rem;
+      color: var(--gray-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .program-features span i {
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+
+    .program-ctas {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .btn-small.btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    .btn-small.btn-primary:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-small.btn-outline-small {
+      border: 1px solid var(--gold);
+      color: var(--navy);
+      background: transparent;
+    }
+
+    .btn-small.btn-outline-small:hover {
+      background: var(--gold-10);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .featured-programs-grid {
+        grid-template-columns: 1fr;
+      }
+      .featured-programs-section {
+        padding: 50px 0;
+      }
+                       }
+    
   </style>
 </head>
 <body>
@@ -1093,6 +1235,91 @@
       </div>
     </div>
 
+        <!-- FEATURED PROGRAMS SECTION - HOME PAGE -->
+    <section class="featured-programs-section">
+      <div class="container">
+        <div class="section-title">
+          <span>Our Programs</span>
+          <h2>Online-First. Skill-Driven. Job-Ready.</h2>
+          <p style="max-width: 700px; margin: 16px auto 0; color: var(--gray-dark);">Choose from four intensive online programs designed for real outcomes — portfolio, MVP, mentorship, or remote job placement.</p>
+        </div>
+
+        <div class="featured-programs-grid">
+          <!-- Program 1: Coding & Tech Bootcamps -->
+          <div class="featured-program-card">
+            <div class="program-badge">⚡ SHORT-TERM · HIGH-INTENSITY</div>
+            <div class="program-icon-large"><i class="fas fa-laptop-code"></i></div>
+            <h3>Coding & Tech Bootcamps</h3>
+            <p class="program-skills">AI · Fintech · Web Development</p>
+            <p class="program-description">Short-term, high-intensity training in AI, fintech, and web development. Build real projects, learn from industry experts, and graduate with a professional portfolio.</p>
+            <div class="program-features">
+              <span><i class="fas fa-check-circle"></i> 12 weeks</span>
+              <span><i class="fas fa-check-circle"></i> Live + Self-paced</span>
+              <span><i class="fas fa-check-circle"></i> Portfolio ready</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- Program 2: Entrepreneurship Micro-Labs -->
+          <div class="featured-program-card">
+            <div class="program-badge">🚀 HANDS-ON · MVP FOCUSED</div>
+            <div class="program-icon-large"><i class="fas fa-rocket"></i></div>
+            <h3>Entrepreneurship Micro-Labs</h3>
+            <p class="program-skills">MVP Creation · Lean Startup · Pitch Prep</p>
+            <p class="program-description">Hands-on programs for students and early-stage entrepreneurs to launch MVPs. Work in teams, validate ideas, and present at Virtual Demo Day.</p>
+            <div class="program-features">
+              <span><i class="fas fa-check-circle"></i> 10 weeks</span>
+              <span><i class="fas fa-check-circle"></i> Cohort-based</span>
+              <span><i class="fas fa-check-circle"></i> MVP + Pitch deck</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply Now →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- Program 3: Mentorship Marketplace -->
+          <div class="featured-program-card">
+            <div class="program-badge">🤝 CONNECT · GROW · THRIVE</div>
+            <div class="program-icon-large"><i class="fas fa-handshake"></i></div>
+            <h3>Mentorship Marketplace</h3>
+            <p class="program-skills">1:1 Guidance · Career Advice · Networking</p>
+            <p class="program-description">Connect founders, students, and professionals with experienced mentors for technical guidance, career advice, and startup support.</p>
+            <div class="program-features">
+              <span><i class="fas fa-check-circle"></i> Ongoing</span>
+              <span><i class="fas fa-check-circle"></i> Self-paced</span>
+              <span><i class="fas fa-check-circle"></i> Network + Certificate</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Join as Mentee →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+
+          <!-- Program 4: Remote Talent Agency -->
+          <div class="featured-program-card">
+            <div class="program-badge">🌍 REMOTE · GLOBAL OPPORTUNITIES</div>
+            <div class="program-icon-large"><i class="fas fa-globe"></i></div>
+            <h3>Remote Talent Agency</h3>
+            <p class="program-skills">Remote Work · Portfolio · Job Placement</p>
+            <p class="program-description">Train and deploy Zambian tech talent to remote jobs worldwide. Work with real clients, build your portfolio, and get matched with global employers.</p>
+            <div class="program-features">
+              <span><i class="fas fa-check-circle"></i> 8 weeks</span>
+              <span><i class="fas fa-check-circle"></i> Project-based</span>
+              <span><i class="fas fa-check-circle"></i> Job placement</span>
+            </div>
+            <div class="program-ctas">
+              <a href="#" class="btn-small btn-primary" data-page="apply">Apply for Training →</a>
+              <a href="#" class="btn-small btn-outline-small" data-page="programs">Learn More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
     <!-- VISION SECTION -->
     <div class="section section-light">
       <div class="container">
@@ -1265,7 +1492,7 @@
     </section>
   </div>
 
-    <!-- APPLY PAGE - WITH REAL PAYMENT SYSTEM -->
+      <!-- APPLY PAGE - WITH UPDATED PROGRAM SELECTION -->
   <div id="apply-page" class="page">
     <div class="navbar-spacer"></div>
     
@@ -1273,8 +1500,8 @@
       <div class="container">
         <div class="university-badge">MASSIVESHIFT COLLEGE ACADEMY</div>
         <h1>Central Application</h1>
-        <p>Business, Entrepreneurship & Job-Focused Training for Africa's Young Workforce</p>
-        <p style="font-size: 14px; margin-top: 8px;">Short, intensive certificate programs (4–12 weeks) in high-demand trades and business roles</p>
+        <p>Online-first. Skill-driven. Job-ready.</p>
+        <p style="font-size: 14px; margin-top: 8px;">Choose from 4 intensive online programs designed for real outcomes</p>
       </div>
     </div>
 
@@ -1294,41 +1521,38 @@
 
     <div class="container">
       <form id="applicationForm">
-        <!-- SECTION 1: PROGRAM SELECTION -->
+        <!-- SECTION 1: PROGRAM SELECTION - UPDATED -->
         <div class="form-section active" data-section="1">
           <h2 class="section-title">Choose Your Program</h2>
-          <p class="section-subtitle">Select the program you wish to apply for</p>
+          <p class="section-subtitle">Select the online-first program you wish to apply for</p>
           
           <div class="schools-grid" id="schoolsGrid">
-            <div class="school-card" data-school="business">
-              <div class="school-icon"><i class="fas fa-building"></i></div>
-              <h3>Business Administration</h3>
-              <p>6 weeks | Corporate ready</p>
-            </div>
-            <div class="school-card" data-school="entrepreneurship">
-              <div class="school-icon"><i class="fas fa-lightbulb"></i></div>
-              <h3>Entrepreneurship</h3>
-              <p>4 weeks | Start your business</p>
-            </div>
-            <div class="school-card" data-school="solar">
-              <div class="school-icon"><i class="fas fa-solar-panel"></i></div>
-              <h3>Solar Business</h3>
-              <p>6 weeks | Green economy</p>
-            </div>
-            <div class="school-card" data-school="digital">
+            <div class="school-card" data-school="tech-accelerate">
               <div class="school-icon"><i class="fas fa-laptop-code"></i></div>
-              <h3>Digital Business</h3>
-              <p>8 weeks | Freelance or agency</p>
+              <h3>Tech Accelerate Online</h3>
+              <p>Coding & Tech Bootcamp | 12 weeks</p>
+              <small style="color: var(--gold);">Web Dev • AI Basics • Fintech Apps</small>
             </div>
-            <div class="school-card" data-school="repair">
-              <div class="school-icon"><i class="fas fa-mobile-alt"></i></div>
-              <h3>Mobile Repair Business</h3>
-              <p>4 weeks | Start your shop</p>
+            
+            <div class="school-card" data-school="launchpad">
+              <div class="school-icon"><i class="fas fa-rocket"></i></div>
+              <h3>LaunchPad Virtual Labs</h3>
+              <p>Entrepreneurship Micro-Labs | 10 weeks</p>
+              <small style="color: var(--gold);">MVP Creation • Lean Startup • Pitch Prep</small>
             </div>
-            <div class="school-card" data-school="sales">
-              <div class="school-icon"><i class="fas fa-chart-line"></i></div>
-              <h3>Sales & Marketing</h3>
-              <p>6 weeks | High-demand roles</p>
+            
+            <div class="school-card" data-school="connect-grow">
+              <div class="school-icon"><i class="fas fa-handshake"></i></div>
+              <h3>Connect & Grow Online</h3>
+              <p>Mentorship Marketplace | Ongoing</p>
+              <small style="color: var(--gold);">1:1 Mentorship • Group Workshops • Career Advice</small>
+            </div>
+            
+            <div class="school-card" data-school="talent-bridge">
+              <div class="school-icon"><i class="fas fa-globe"></i></div>
+              <h3>Global Talent Bridge Online</h3>
+              <p>Remote Talent Agency | 8 weeks</p>
+              <small style="color: var(--gold);">Remote Work • Portfolio • Job Placement</small>
             </div>
           </div>
           
@@ -1340,7 +1564,7 @@
           </div>
         </div>
 
-        <!-- SECTION 2: PERSONAL INFORMATION -->
+        <!-- SECTION 2: PERSONAL INFORMATION (unchanged) -->
         <div class="form-section" data-section="2">
           <h2 class="section-title">Personal Information</h2>
           <p class="section-subtitle">Tell us about yourself</p>
@@ -1365,7 +1589,7 @@
           </div>
         </div>
 
-        <!-- SECTION 3: PAYMENT - REAL SYSTEM -->
+        <!-- SECTION 3: PAYMENT (unchanged) -->
         <div class="form-section" data-section="3">
           <h2 class="section-title">Application Fee Payment</h2>
           <p class="section-subtitle">Pay your application fee to continue</p>
@@ -1386,10 +1610,9 @@
               <div class="payment-method" data-method="bank"><i class="fas fa-university"></i><span>Bank Transfer</span></div>
             </div>
             
-            <!-- Bank Transfer Details (shown only when bank transfer is selected) -->
             <div id="bankDetails" style="display: none; background: var(--gold-10); padding: 20px; border-radius: 12px; margin: 20px 0;">
               <h4 style="color: var(--navy); margin-bottom: 12px;">🏦 Bank Transfer Details</h4>
-              <p><strong>Bank:</strong> [Your Bank Name]</p>
+              <p><strong>Bank Name:</strong> [Your Bank Name]</p>
               <p><strong>Account Name:</strong> MassiveShift College Academy</p>
               <p><strong>Account Number:</strong> [Your Account Number]</p>
               <p><strong>Branch:</strong> [Your Branch]</p>
@@ -1408,7 +1631,7 @@
           </div>
         </div>
 
-        <!-- SECTION 4-7: LOCKED UNTIL PAYMENT VERIFIED -->
+        <!-- SECTION 4: ACADEMIC HISTORY (unchanged) -->
         <div class="form-section payment-locked" data-section="4">
           <h2 class="section-title">Academic History</h2>
           <div class="form-grid">
@@ -1419,12 +1642,14 @@
           </div>
         </div>
 
+        <!-- SECTION 5: ESSAYS (unchanged) -->
         <div class="form-section payment-locked" data-section="5">
           <h2 class="section-title">Personal Essays</h2>
           <div class="form-group full-width"><label>Essay 1: Why MassiveShift? <span class="required">*</span></label><textarea name="essay1" id="essay1" rows="6" placeholder="Please explain why you are interested in MassiveShift College Academy and how our programs align with your career goals. (200-400 words)" required disabled></textarea></div>
           <div class="form-group full-width"><label>Essay 2: Your Goals <span class="required">*</span></label><textarea name="essay2" id="essay2" rows="6" placeholder="Describe your professional goals and how this program will help you achieve them. (200-400 words)" required disabled></textarea></div>
         </div>
 
+        <!-- SECTION 6: DOCUMENTS (unchanged) -->
         <div class="form-section payment-locked" data-section="6">
           <h2 class="section-title">Supporting Documents</h2>
           <div class="form-grid">
@@ -1433,6 +1658,7 @@
           </div>
         </div>
 
+        <!-- SECTION 7: REVIEW (unchanged) -->
         <div class="form-section payment-locked" data-section="7">
           <h2 class="section-title">Review & Submit</h2>
           <div id="reviewContent"></div>
@@ -1593,7 +1819,47 @@
     
     updateCardsPerView();
   }
+    
+    // ========================================
+  // FEATURED PROGRAMS CTA HANDLERS
+  // ========================================
+  function initFeaturedProgramsCtas() {
+    const featuredSection = document.querySelector('.featured-programs-section');
+    if (!featuredSection) return;
+    
+    const allCtaBtns = featuredSection.querySelectorAll('.btn-small');
+    allCtaBtns.forEach(btn => {
+      // Remove any existing listeners to avoid duplicates
+      btn.removeEventListener('click', handleCtaClick);
+      btn.addEventListener('click', handleCtaClick);
+    });
+  }
   
+  function handleCtaClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const targetPage = this.getAttribute('data-page');
+    if (targetPage === 'apply') {
+      switchPage('apply');
+    } else if (targetPage === 'programs') {
+      switchPage('programs');
+    } else if (targetPage === 'contact') {
+      switchPage('contact');
+    } else {
+      switchPage('programs'); // default fallback
+    }
+  }
+  
+  // Call this after page loads and after any dynamic content updates
+  initFeaturedProgramsCtas();
+  
+  // Also re-initialize when page switches (in case content changes)
+  const originalSwitchPage = switchPage;
+  window.switchPage = function(pId) {
+    originalSwitchPage(pId);
+    setTimeout(initFeaturedProgramsCtas, 100);
+  };
+    
   // ========================================
   // APPLICATION SYSTEM WITH REAL PAYMENT REDIRECTS
   // ========================================
@@ -1943,6 +2209,29 @@
       if (!isValid) showToastMessage('Please fill in all required fields', true);
       return isValid;
     }
+    
+              const programs = {
+            'tech-accelerate': [
+              'Full-Stack Web Development Certificate',
+              'AI & Fintech Fundamentals Certificate',
+              'Professional Coding Bootcamp'
+            ],
+            'launchpad': [
+              'MVP Builder Certificate',
+              'Startup Launch Certificate',
+              'Product Management Micro-Credential'
+            ],
+            'connect-grow': [
+              'Tech Mentorship Track',
+              'Career Development Track',
+              'Entrepreneurship Mentorship Track'
+            ],
+            'talent-bridge': [
+              'Remote Work Readiness Certificate',
+              'Freelance Professional Certificate',
+              'Global Talent Placement Program'
+            ]
+          };
     
     function generateReview() {
       const reviewContent = applyPage.querySelector('#reviewContent');
