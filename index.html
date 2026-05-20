@@ -1265,7 +1265,7 @@
     </section>
   </div>
 
-  <!-- APPLY PAGE - INTEGRATED APPLICATION SYSTEM -->
+    <!-- APPLY PAGE - WITH REAL PAYMENT SYSTEM -->
   <div id="apply-page" class="page">
     <div class="navbar-spacer"></div>
     
@@ -1365,29 +1365,50 @@
           </div>
         </div>
 
-        <!-- SECTION 3: PAYMENT -->
+        <!-- SECTION 3: PAYMENT - REAL SYSTEM -->
         <div class="form-section" data-section="3">
           <h2 class="section-title">Application Fee Payment</h2>
           <p class="section-subtitle">Pay your application fee to continue</p>
           <div class="payment-card">
             <div class="fee-summary"><p>Application Fee Amount</p><div class="fee-amount" id="feeAmount">ZK150</div><small id="feeNote">(~$7.50 USD) for Zambian and African applicants</small></div>
+            
             <div class="resident-selector" id="residentSelector">
               <div class="resident-option" data-resident="local"><h4>🌍 Local / African Applicant</h4><div class="price">ZK150</div><small>Zambia & other African countries</small></div>
               <div class="resident-option" data-resident="international"><h4>🌎 International Applicant</h4><div class="price">$15 USD</div><small>Outside Africa</small></div>
             </div>
+            
             <div class="payment-methods" id="paymentMethods">
               <div class="payment-method" data-method="airtel"><i class="fas fa-mobile-alt"></i><span>Airtel Money</span></div>
               <div class="payment-method" data-method="mtn"><i class="fas fa-mobile-alt"></i><span>MTN Money</span></div>
+              <div class="payment-method" data-method="zamtel"><i class="fas fa-mobile-alt"></i><span>Zamtel Money</span></div>
               <div class="payment-method" data-method="card"><i class="fab fa-cc-visa"></i><span>Credit / Debit Card</span></div>
               <div class="payment-method" data-method="paypal"><i class="fab fa-paypal"></i><span>PayPal</span></div>
               <div class="payment-method" data-method="bank"><i class="fas fa-university"></i><span>Bank Transfer</span></div>
             </div>
+            
+            <!-- Bank Transfer Details (shown only when bank transfer is selected) -->
+            <div id="bankDetails" style="display: none; background: var(--gold-10); padding: 20px; border-radius: 12px; margin: 20px 0;">
+              <h4 style="color: var(--navy); margin-bottom: 12px;">🏦 Bank Transfer Details</h4>
+              <p><strong>Bank:</strong> [Your Bank Name]</p>
+              <p><strong>Account Name:</strong> MassiveShift College Academy</p>
+              <p><strong>Account Number:</strong> [Your Account Number]</p>
+              <p><strong>Branch:</strong> [Your Branch]</p>
+              <p><strong>Reference:</strong> Your Full Name + Application Fee</p>
+              <div class="form-group full-width" style="margin-top: 16px;">
+                <label>Upload Proof of Payment <span class="required">*</span></label>
+                <input type="file" id="paymentProof" accept="image/*,.pdf">
+                <small class="helper-text">Upload screenshot or PDF of your bank transfer receipt</small>
+              </div>
+            </div>
+            
             <button type="button" class="pay-now-btn" id="payNowBtn">Proceed to Payment</button>
-            <div id="paymentStatus" class="payment-status pending" style="display: none;"><i class="fas fa-clock"></i> Payment pending. Complete payment to continue.</div>
+            <div id="paymentStatus" class="payment-status pending" style="display: none;">
+              <i class="fas fa-clock"></i> Payment pending. Complete payment to continue.
+            </div>
           </div>
         </div>
 
-        <!-- SECTION 4: ACADEMIC HISTORY -->
+        <!-- SECTION 4-7: LOCKED UNTIL PAYMENT VERIFIED -->
         <div class="form-section payment-locked" data-section="4">
           <h2 class="section-title">Academic History</h2>
           <div class="form-grid">
@@ -1398,24 +1419,20 @@
           </div>
         </div>
 
-        <!-- SECTION 5: ESSAYS -->
         <div class="form-section payment-locked" data-section="5">
           <h2 class="section-title">Personal Essays</h2>
           <div class="form-group full-width"><label>Essay 1: Why MassiveShift? <span class="required">*</span></label><textarea name="essay1" id="essay1" rows="6" placeholder="Please explain why you are interested in MassiveShift College Academy and how our programs align with your career goals. (200-400 words)" required disabled></textarea></div>
           <div class="form-group full-width"><label>Essay 2: Your Goals <span class="required">*</span></label><textarea name="essay2" id="essay2" rows="6" placeholder="Describe your professional goals and how this program will help you achieve them. (200-400 words)" required disabled></textarea></div>
         </div>
 
-        <!-- SECTION 6: DOCUMENTS -->
         <div class="form-section payment-locked" data-section="6">
           <h2 class="section-title">Supporting Documents</h2>
           <div class="form-grid">
             <div class="form-group full-width"><label>Resume/CV <span class="required">*</span></label><input type="file" name="resume" id="resume" required disabled></div>
             <div class="form-group full-width"><label>Academic Certificate/Transcript <span class="required">*</span></label><input type="file" name="transcript" id="transcript" required disabled></div>
-            <div class="form-group full-width"><label>Proof of Payment (if Bank Transfer)</label><input type="file" name="paymentProof" id="paymentProof" disabled></div>
           </div>
         </div>
 
-        <!-- SECTION 7: REVIEW -->
         <div class="form-section payment-locked" data-section="7">
           <h2 class="section-title">Review & Submit</h2>
           <div id="reviewContent"></div>
