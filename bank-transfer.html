@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Transfer Payment | MassiveShift College Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #07152d 0%, #0d2348 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .payment-container { background: white; border-radius: 24px; padding: 40px; max-width: 600px; width: 100%; }
+        .bank-details { background: #F5F5F5; padding: 24px; border-radius: 16px; margin: 20px 0; }
+        .bank-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #E0E0E0; }
+        .upload-area { border: 2px dashed #f39c12; border-radius: 12px; padding: 30px; text-align: center; margin: 20px 0; cursor: pointer; transition: all 0.3s; }
+        .upload-area:hover { background: #FFF8E7; border-color: #e67e22; }
+        .upload-area.dragover { background: #E8F0FE; border-color: #07152d; }
+        .preview-image { max-width: 100%; max-height: 200px; margin-top: 16px; border-radius: 8px; display: none; }
+        .btn { width: 100%; padding: 16px; background: #f39c12; color: #07152d; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 20px; transition: all 0.3s; }
+        .btn:hover { background: #e67e22; transform: translateY(-2px); }
+        .btn-secondary { background: #07152d; color: white; margin-top: 12px; }
+        .reference-code { background: #07152d; color: white; padding: 12px; border-radius: 8px; text-align: center; font-family: monospace; font-size: 18px; letter-spacing: 2px; margin: 16px 0; }
+        .helper-text { font-size: 12px; color: #666; margin-top: 8px; text-align: center; }
+        .loading { display: none; text-align: center; margin: 20px 0; }
+        .loading.show { display: block; }
+        .amount { font-size: 36px; font-weight: 800; color: #f39c12; margin: 20px 0; text-align: center; }
+        h1 { text-align: center; color: #07152d; }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h1><i class="fas fa-university"></i> Bank Transfer</h1>
+        <p style="text-align: center;">Pay your application fee via bank transfer</p>
+        
+        <div class="amount" id="amountDisplay">ZK150</div>
+        
+        <div class="bank-details">
+            <h3 style="margin-bottom: 16px; color: #07152d;">Bank Account Details</h3>
+            <div class="bank-row"><strong>Bank Name:</strong><span>[Your Bank Name]</span></div>
+            <div class="bank-row"><strong>Account Name:</strong><span>MassiveShift College Academy</span></div>
+            <div class="bank-row"><strong>Account Number:</strong><span>[Your Account Number]</span></div>
+            <div class="bank-row"><strong>Branch:</strong><span>[Your Branch]</span></div>
+            <div class="bank-row"><strong>Swift Code:</strong><span>[Your Swift Code]</span></div>
+            <div class="bank-row"><strong>Reference:</strong><span id="referenceCode">MS-XXXXXXXX</span></div>
+        </div>
+        
+        <div class="reference-code" id="refDisplay">MS-XXXXXXXX</div>
+        
+        <div class="upload-area" id="uploadArea">
+            <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #f39c12;"></i>
+            <p>Click or drag to upload proof of payment</p>
+            <p style="font-size: 12px; margin-top: 8px;">PNG, JPG, or PDF (max 5MB)</p>
+            <input type="file" id="proofUpload" style="display: none;" accept="image/*,.pdf">
+            <img id="preview" class="preview-image" alt="Preview">
+        </div>
+        
+        <div class="loading" id="loading">
+            <i class="fas fa-spinner fa-spin"></i> Submitting proof...
+        </div>
+        
+        <button class="btn" id="submitProofBtn">Submit Proof for Verification</button>
+        <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+        
+        <div id="submissionStatus" style="margin-top: 16px; text-align: center;"></div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const amount = urlParams.get('amount') || '150';
+        const currency = urlParams.get('currency') || 'ZMW';
+        const applicantName = decodeURIComponent(urlParams.get('name') || 'Applicant');
+        const applicantEmail = decodeURIComponent(urlParams.get('email') || '');
+        const applicantPhone = decodeURIComponent(urlParams.get('phone') || '');
+        
+        const displayAmount = currency === 'ZMW' ? `ZK${amount}` : `$${amount}`;
+        document.getElementById('amountDisplay').innerText = displayAmount;
+        
+        const referenceCode = `MS-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
+        document.getElementById('referenceCode').innerText = referenceCode;
+        document.getElementById('refDisplay').innerText = referenceCode;
+        
+        let selectedFile = null;
+        let selectedFileData = null;
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('proofUpload');
+        const preview = document.getElementById('preview');
+        const submitBtn = document.getElementById('submitProofBtn');
+        const loading = document.getElementById('loading');
+        const submissionStatus = document.getElementById('submissionStatus');
+        
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) handleFile(e.target.files[0]);
+        });
+        
+        function handleFile(file) {
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File too large. Max 5MB');
+                return;
+            }
+            selectedFile = file;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                selectedFileData = e.target.result;
+                if (file.type.startsWith('image/')) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+            };
+            reader.readAsDataURL(file);
+            uploadArea.style.borderColor = '#28A745';
+        }
+        
+        submitBtn.addEventListener('click', async () => {
+            if (!selectedFile) {
+                alert('Please upload proof of payment first');
+                return;
+            }
+            
+            loading.classList.add('show');
+            submitBtn.disabled = true;
+            
+            const submissionData = {
+                referenceCode: referenceCode,
+                applicantName: applicantName,
+                applicantEmail: applicantEmail,
+                applicantPhone: applicantPhone,
+                amount: amount,
+                currency: currency,
+                paymentMethod: 'Bank Transfer',
+                timestamp: new Date().toISOString(),
+                status: 'pending',
+                proofImage: selectedFileData
+            };
+            
+            let pendingVerifications = JSON.parse(localStorage.getItem('pendingVerifications') || '[]');
+            pendingVerifications.push(submissionData);
+            localStorage.setItem('pendingVerifications', JSON.stringify(pendingVerifications));
+            localStorage.setItem(`proof_${referenceCode}`, JSON.stringify(submissionData));
+            localStorage.setItem('applicationFeePaid', 'pending');
+            
+            console.log('=== MASSIVESHIFT BANK TRANSFER PAYMENT ===');
+            console.log('Reference:', referenceCode);
+            console.log('Applicant:', applicantName);
+            console.log('Email:', applicantEmail);
+            console.log('Phone:', applicantPhone);
+            console.log('Amount:', displayAmount);
+            console.log('=========================================');
+            
+            setTimeout(() => {
+                loading.classList.remove('show');
+                submissionStatus.innerHTML = `
+                    <div style="background: #D4EDDA; padding: 16px; border-radius: 12px; color: #155724;">
+                        <i class="fas fa-check-circle"></i> Proof submitted successfully!<br>
+                        Your reference code: <strong>${referenceCode}</strong><br><br>
+                        Our admissions team will verify your payment within 24 hours.<br>
+                        You will receive an email confirmation once verified.<br><br>
+                        <a href="../index.html?ref=${referenceCode}&pending=true" style="color: #f39c12; font-weight: 600;">Return to Application</a>
+                    </div>
+                `;
+                submitBtn.style.display = 'none';
+                document.getElementById('cancelBtn').style.display = 'none';
+                uploadArea.style.display = 'none';
+                
+                setTimeout(() => {
+                    window.location.href = `../index.html?ref=${referenceCode}&pending=true`;
+                }, 5000);
+            }, 1500);
+        });
+        
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            window.location.href = '../index.html';
+        });
+    </script>
+</body>
+</html>
